@@ -1,0 +1,231 @@
+{
+  "id": "meditech",
+  "name": "MEDITECH (Expanse/6.x)",
+  "description": "Schema based on MEDITECH Expanse and 6.x Revenue Cycle tables",
+  "tables": [
+    {
+      "name": "MRI.PATIENT",
+      "description": "MEDITECH patient master (MRI)",
+      "columns": [
+        {"name": "PATIENT_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Unique patient identifier"},
+        {"name": "MRN", "type": "VARCHAR(20)", "description": "Medical record number"},
+        {"name": "LAST_NAME", "type": "VARCHAR(50)", "description": "Patient last name"},
+        {"name": "FIRST_NAME", "type": "VARCHAR(50)", "description": "Patient first name"},
+        {"name": "MIDDLE_NAME", "type": "VARCHAR(50)", "description": "Patient middle name"},
+        {"name": "DATE_OF_BIRTH", "type": "DATE", "description": "Date of birth"},
+        {"name": "SSN", "type": "VARCHAR(11)", "description": "Social security number"},
+        {"name": "SEX", "type": "VARCHAR(1)", "description": "Sex (M/F)"},
+        {"name": "ADDRESS_1", "type": "VARCHAR(100)", "description": "Address line 1"},
+        {"name": "ADDRESS_2", "type": "VARCHAR(100)", "description": "Address line 2"},
+        {"name": "CITY", "type": "VARCHAR(50)", "description": "City"},
+        {"name": "STATE", "type": "VARCHAR(2)", "description": "State"},
+        {"name": "ZIP_CODE", "type": "VARCHAR(10)", "description": "ZIP code"},
+        {"name": "PHONE_HOME", "type": "VARCHAR(20)", "description": "Home phone"},
+        {"name": "PHONE_WORK", "type": "VARCHAR(20)", "description": "Work phone"},
+        {"name": "EMAIL", "type": "VARCHAR(100)", "description": "Email address"}
+      ]
+    },
+    {
+      "name": "MRI.PROVIDER",
+      "description": "MEDITECH provider master",
+      "columns": [
+        {"name": "PROVIDER_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Provider identifier"},
+        {"name": "NPI", "type": "VARCHAR(10)", "description": "National Provider Identifier"},
+        {"name": "LAST_NAME", "type": "VARCHAR(50)", "description": "Provider last name"},
+        {"name": "FIRST_NAME", "type": "VARCHAR(50)", "description": "Provider first name"},
+        {"name": "CREDENTIALS", "type": "VARCHAR(20)", "description": "Credentials (MD, DO, NP, etc.)"},
+        {"name": "SPECIALTY", "type": "VARCHAR(50)", "description": "Specialty"},
+        {"name": "DEPARTMENT", "type": "VARCHAR(50)", "description": "Department"},
+        {"name": "STATUS", "type": "VARCHAR(10)", "description": "Active/Inactive status"}
+      ]
+    },
+    {
+      "name": "ADM.VISIT",
+      "description": "MEDITECH ADM visit/encounter record",
+      "columns": [
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Unique visit identifier"},
+        {"name": "ACCOUNT_NUMBER", "type": "VARCHAR(20)", "description": "Account number"},
+        {"name": "PATIENT_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PATIENT.PATIENT_ID", "description": "Patient ID"},
+        {"name": "ADMIT_DATE", "type": "DATE", "description": "Admission date"},
+        {"name": "ADMIT_TIME", "type": "TIME", "description": "Admission time"},
+        {"name": "DISCHARGE_DATE", "type": "DATE", "description": "Discharge date"},
+        {"name": "DISCHARGE_TIME", "type": "TIME", "description": "Discharge time"},
+        {"name": "VISIT_TYPE", "type": "VARCHAR(20)", "description": "Visit type (IP, OP, ED, OBS)"},
+        {"name": "PATIENT_TYPE", "type": "VARCHAR(20)", "description": "Patient type"},
+        {"name": "FACILITY", "type": "VARCHAR(20)", "description": "Facility code"},
+        {"name": "UNIT", "type": "VARCHAR(20)", "description": "Nursing unit"},
+        {"name": "ATTENDING_PROVIDER_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PROVIDER.PROVIDER_ID", "description": "Attending provider"},
+        {"name": "ADMITTING_PROVIDER_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PROVIDER.PROVIDER_ID", "description": "Admitting provider"},
+        {"name": "VISIT_STATUS", "type": "VARCHAR(20)", "description": "Visit status"}
+      ]
+    },
+    {
+      "name": "ADM.VISIT_INSURANCE",
+      "description": "MEDITECH visit insurance coverage",
+      "columns": [
+        {"name": "VISIT_INSURANCE_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Coverage record ID"},
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "foreign_key": "ADM.VISIT.VISIT_ID", "description": "Visit ID"},
+        {"name": "INSURANCE_ID", "type": "VARCHAR(20)", "foreign_key": "BAR.INSURANCE.INSURANCE_ID", "description": "Insurance ID"},
+        {"name": "PRIORITY", "type": "INT", "description": "Priority (1=Primary, 2=Secondary)"},
+        {"name": "SUBSCRIBER_ID", "type": "VARCHAR(50)", "description": "Subscriber/member ID"},
+        {"name": "GROUP_NUMBER", "type": "VARCHAR(50)", "description": "Group number"},
+        {"name": "EFFECTIVE_DATE", "type": "DATE", "description": "Effective date"},
+        {"name": "TERMINATION_DATE", "type": "DATE", "description": "Termination date"},
+        {"name": "COPAY", "type": "DECIMAL(10,2)", "description": "Copay amount"},
+        {"name": "DEDUCTIBLE", "type": "DECIMAL(10,2)", "description": "Deductible amount"}
+      ]
+    },
+    {
+      "name": "BAR.INSURANCE",
+      "description": "MEDITECH insurance/payer master",
+      "columns": [
+        {"name": "INSURANCE_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Insurance identifier"},
+        {"name": "INSURANCE_NAME", "type": "VARCHAR(100)", "description": "Insurance company name"},
+        {"name": "PLAN_NAME", "type": "VARCHAR(100)", "description": "Plan name"},
+        {"name": "PLAN_TYPE", "type": "VARCHAR(20)", "description": "Plan type (HMO, PPO, Medicare, etc.)"},
+        {"name": "FINANCIAL_CLASS", "type": "VARCHAR(20)", "description": "Financial class"},
+        {"name": "PAYER_ID", "type": "VARCHAR(20)", "description": "Payer ID for claims"},
+        {"name": "STATUS", "type": "VARCHAR(10)", "description": "Active/Inactive"}
+      ]
+    },
+    {
+      "name": "ADM.VISIT_DIAGNOSIS",
+      "description": "MEDITECH visit diagnosis codes",
+      "columns": [
+        {"name": "VISIT_DIAGNOSIS_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Diagnosis record ID"},
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "foreign_key": "ADM.VISIT.VISIT_ID", "description": "Visit ID"},
+        {"name": "DIAGNOSIS_CODE", "type": "VARCHAR(10)", "description": "ICD-10 diagnosis code"},
+        {"name": "DIAGNOSIS_DESC", "type": "VARCHAR(255)", "description": "Diagnosis description"},
+        {"name": "DIAGNOSIS_TYPE", "type": "VARCHAR(20)", "description": "Type (Admitting, Principal, Secondary)"},
+        {"name": "SEQUENCE", "type": "INT", "description": "Sequence number"},
+        {"name": "POA_INDICATOR", "type": "VARCHAR(1)", "description": "Present on admission indicator"}
+      ]
+    },
+    {
+      "name": "BAR.CHARGE",
+      "description": "MEDITECH billing charges",
+      "columns": [
+        {"name": "CHARGE_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Charge record ID"},
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "foreign_key": "ADM.VISIT.VISIT_ID", "description": "Visit ID"},
+        {"name": "CHARGE_CODE", "type": "VARCHAR(20)", "description": "Charge code"},
+        {"name": "CHARGE_DESC", "type": "VARCHAR(200)", "description": "Charge description"},
+        {"name": "CPT_CODE", "type": "VARCHAR(10)", "description": "CPT code"},
+        {"name": "HCPCS_CODE", "type": "VARCHAR(10)", "description": "HCPCS code"},
+        {"name": "REVENUE_CODE", "type": "VARCHAR(10)", "description": "Revenue code"},
+        {"name": "SERVICE_DATE", "type": "DATE", "description": "Service date"},
+        {"name": "POST_DATE", "type": "DATE", "description": "Posted date"},
+        {"name": "QUANTITY", "type": "INT", "description": "Quantity"},
+        {"name": "UNIT_PRICE", "type": "DECIMAL(10,2)", "description": "Unit price"},
+        {"name": "TOTAL_CHARGE", "type": "DECIMAL(10,2)", "description": "Total charge amount"},
+        {"name": "DEPARTMENT", "type": "VARCHAR(20)", "description": "Department"},
+        {"name": "PERFORMING_PROVIDER_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PROVIDER.PROVIDER_ID", "description": "Performing provider"}
+      ]
+    },
+    {
+      "name": "BAR.CLAIM",
+      "description": "MEDITECH claim records",
+      "columns": [
+        {"name": "CLAIM_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Claim identifier"},
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "foreign_key": "ADM.VISIT.VISIT_ID", "description": "Visit ID"},
+        {"name": "PATIENT_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PATIENT.PATIENT_ID", "description": "Patient ID"},
+        {"name": "INSURANCE_ID", "type": "VARCHAR(20)", "foreign_key": "BAR.INSURANCE.INSURANCE_ID", "description": "Insurance ID"},
+        {"name": "CLAIM_TYPE", "type": "VARCHAR(20)", "description": "Claim type (UB, 1500)"},
+        {"name": "BILL_TYPE", "type": "VARCHAR(4)", "description": "Bill type code"},
+        {"name": "SUBMISSION_DATE", "type": "DATE", "description": "Submission date"},
+        {"name": "FROM_DATE", "type": "DATE", "description": "Statement from date"},
+        {"name": "TO_DATE", "type": "DATE", "description": "Statement to date"},
+        {"name": "TOTAL_CHARGES", "type": "DECIMAL(12,2)", "description": "Total charges"},
+        {"name": "TOTAL_ALLOWED", "type": "DECIMAL(12,2)", "description": "Total allowed amount"},
+        {"name": "TOTAL_PAYMENTS", "type": "DECIMAL(12,2)", "description": "Total payments"},
+        {"name": "TOTAL_ADJUSTMENTS", "type": "DECIMAL(12,2)", "description": "Total adjustments"},
+        {"name": "PATIENT_BALANCE", "type": "DECIMAL(12,2)", "description": "Patient balance"},
+        {"name": "CLAIM_STATUS", "type": "VARCHAR(20)", "description": "Claim status (New, Submitted, Paid, Denied)"},
+        {"name": "DENIAL_CODE", "type": "VARCHAR(20)", "description": "Denial reason code"},
+        {"name": "DENIAL_REASON", "type": "VARCHAR(255)", "description": "Denial reason description"},
+        {"name": "CREATED_DATE", "type": "DATE", "description": "Created date"},
+        {"name": "MODIFIED_DATE", "type": "DATE", "description": "Last modified date"}
+      ]
+    },
+    {
+      "name": "BAR.CLAIM_LINE",
+      "description": "MEDITECH claim line items",
+      "columns": [
+        {"name": "CLAIM_LINE_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Claim line ID"},
+        {"name": "CLAIM_ID", "type": "VARCHAR(20)", "foreign_key": "BAR.CLAIM.CLAIM_ID", "description": "Claim ID"},
+        {"name": "LINE_NUMBER", "type": "INT", "description": "Line number"},
+        {"name": "CHARGE_ID", "type": "VARCHAR(20)", "foreign_key": "BAR.CHARGE.CHARGE_ID", "description": "Charge ID"},
+        {"name": "CPT_CODE", "type": "VARCHAR(10)", "description": "CPT code"},
+        {"name": "MODIFIER_1", "type": "VARCHAR(2)", "description": "Modifier 1"},
+        {"name": "MODIFIER_2", "type": "VARCHAR(2)", "description": "Modifier 2"},
+        {"name": "MODIFIER_3", "type": "VARCHAR(2)", "description": "Modifier 3"},
+        {"name": "MODIFIER_4", "type": "VARCHAR(2)", "description": "Modifier 4"},
+        {"name": "REVENUE_CODE", "type": "VARCHAR(10)", "description": "Revenue code"},
+        {"name": "UNITS", "type": "INT", "description": "Units"},
+        {"name": "CHARGES", "type": "DECIMAL(10,2)", "description": "Line charges"},
+        {"name": "ALLOWED", "type": "DECIMAL(10,2)", "description": "Allowed amount"},
+        {"name": "PAID", "type": "DECIMAL(10,2)", "description": "Paid amount"},
+        {"name": "ADJUSTMENT", "type": "DECIMAL(10,2)", "description": "Adjustment amount"},
+        {"name": "LINE_STATUS", "type": "VARCHAR(20)", "description": "Line status"}
+      ]
+    },
+    {
+      "name": "BAR.PAYMENT",
+      "description": "MEDITECH payment records",
+      "columns": [
+        {"name": "PAYMENT_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Payment ID"},
+        {"name": "CLAIM_ID", "type": "VARCHAR(20)", "foreign_key": "BAR.CLAIM.CLAIM_ID", "description": "Claim ID"},
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "foreign_key": "ADM.VISIT.VISIT_ID", "description": "Visit ID"},
+        {"name": "PAYMENT_DATE", "type": "DATE", "description": "Payment date"},
+        {"name": "POST_DATE", "type": "DATE", "description": "Post date"},
+        {"name": "PAYMENT_AMOUNT", "type": "DECIMAL(12,2)", "description": "Payment amount"},
+        {"name": "PAYMENT_TYPE", "type": "VARCHAR(20)", "description": "Payment type (Insurance, Patient, Adjustment)"},
+        {"name": "PAYMENT_METHOD", "type": "VARCHAR(20)", "description": "Payment method (Check, EFT, Cash, CC)"},
+        {"name": "CHECK_NUMBER", "type": "VARCHAR(50)", "description": "Check/EFT number"},
+        {"name": "PAYER_NAME", "type": "VARCHAR(100)", "description": "Payer name"},
+        {"name": "REMIT_CODE", "type": "VARCHAR(20)", "description": "Remittance advice code"}
+      ]
+    },
+    {
+      "name": "BAR.STATEMENT",
+      "description": "MEDITECH patient statements",
+      "columns": [
+        {"name": "STATEMENT_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Statement ID"},
+        {"name": "PATIENT_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PATIENT.PATIENT_ID", "description": "Patient ID"},
+        {"name": "GUARANTOR_ID", "type": "VARCHAR(20)", "description": "Guarantor ID"},
+        {"name": "STATEMENT_DATE", "type": "DATE", "description": "Statement date"},
+        {"name": "DUE_DATE", "type": "DATE", "description": "Due date"},
+        {"name": "TOTAL_DUE", "type": "DECIMAL(12,2)", "description": "Total amount due"},
+        {"name": "PREVIOUS_BALANCE", "type": "DECIMAL(12,2)", "description": "Previous balance"},
+        {"name": "NEW_CHARGES", "type": "DECIMAL(12,2)", "description": "New charges"},
+        {"name": "PAYMENTS", "type": "DECIMAL(12,2)", "description": "Payments received"},
+        {"name": "ADJUSTMENTS", "type": "DECIMAL(12,2)", "description": "Adjustments"},
+        {"name": "CURRENT_DUE", "type": "DECIMAL(12,2)", "description": "Current (0-30 days)"},
+        {"name": "PAST_DUE_31_60", "type": "DECIMAL(12,2)", "description": "31-60 days past due"},
+        {"name": "PAST_DUE_61_90", "type": "DECIMAL(12,2)", "description": "61-90 days past due"},
+        {"name": "PAST_DUE_OVER_90", "type": "DECIMAL(12,2)", "description": "Over 90 days past due"},
+        {"name": "STATEMENT_STATUS", "type": "VARCHAR(20)", "description": "Statement status"},
+        {"name": "COLLECTION_STATUS", "type": "VARCHAR(20)", "description": "Collection status"}
+      ]
+    },
+    {
+      "name": "BAR.ACCOUNT",
+      "description": "MEDITECH billing account summary",
+      "columns": [
+        {"name": "ACCOUNT_ID", "type": "VARCHAR(20)", "primary_key": true, "description": "Account ID"},
+        {"name": "VISIT_ID", "type": "VARCHAR(20)", "foreign_key": "ADM.VISIT.VISIT_ID", "description": "Visit ID"},
+        {"name": "PATIENT_ID", "type": "VARCHAR(20)", "foreign_key": "MRI.PATIENT.PATIENT_ID", "description": "Patient ID"},
+        {"name": "ACCOUNT_NUMBER", "type": "VARCHAR(20)", "description": "Account number"},
+        {"name": "TOTAL_CHARGES", "type": "DECIMAL(12,2)", "description": "Total charges"},
+        {"name": "TOTAL_PAYMENTS", "type": "DECIMAL(12,2)", "description": "Total payments"},
+        {"name": "TOTAL_ADJUSTMENTS", "type": "DECIMAL(12,2)", "description": "Total adjustments"},
+        {"name": "BALANCE", "type": "DECIMAL(12,2)", "description": "Account balance"},
+        {"name": "INSURANCE_BALANCE", "type": "DECIMAL(12,2)", "description": "Insurance balance"},
+        {"name": "PATIENT_BALANCE", "type": "DECIMAL(12,2)", "description": "Patient balance"},
+        {"name": "ACCOUNT_STATUS", "type": "VARCHAR(20)", "description": "Account status"},
+        {"name": "FINANCIAL_CLASS", "type": "VARCHAR(20)", "description": "Financial class"},
+        {"name": "LAST_PAYMENT_DATE", "type": "DATE", "description": "Last payment date"},
+        {"name": "LAST_STATEMENT_DATE", "type": "DATE", "description": "Last statement date"}
+      ]
+    }
+  ]
+}
