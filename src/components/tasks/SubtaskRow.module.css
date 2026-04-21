@@ -1,0 +1,128 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px 5px 64px;
+  border-top: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.row:hover { background: var(--surface); }
+
+.done { opacity: 0.6; }
+
+.checkbox {
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: #0085CA;
+}
+
+.text {
+  font-size: 12px;
+  color: var(--text);
+  flex: 1;
+  cursor: text;
+  min-width: 0;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  color: var(--text3) !important;
+}
+
+.editInput {
+  flex: 1;
+  font-size: 12px;
+  padding: 2px 6px;
+  border: 1px solid var(--blue);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--text);
+  min-width: 0;
+}
+
+.owner {
+  font-size: 10px;
+  color: var(--text3);
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.del {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0 4px;
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.del:hover { color: var(--red); }
+
+/* Date display */
+.dateDisplay {
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.dateDisplay:hover { border-color: var(--blue); color: var(--blue); }
+
+.dateInherited {
+  color: var(--text3);
+  border-style: dashed;
+}
+
+.dateEmpty {
+  color: var(--text3);
+  font-style: italic;
+}
+
+.dateInputs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.dateInput {
+  font-size: 11px;
+  padding: 2px 5px;
+  border: 1px solid var(--border-med);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  width: 112px;
+}
+
+.dateSep {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.dateClose {
+  font-size: 11px;
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 0 3px;
+  line-height: 1;
+}
+
+.dateClose:hover { color: var(--red); }

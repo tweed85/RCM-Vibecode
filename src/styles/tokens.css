@@ -1,0 +1,91 @@
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --surface2: #edf1f5;
+  --border: rgba(0,43,73,0.10);
+  --border-med: rgba(0,43,73,0.20);
+  --text: #002B49;
+  --text2: #3a5a72;
+  --text3: #969696;
+  --green: #29702A;
+  --green-bg: #e8f5e8;
+  --amber: #CF7F00;
+  --amber-bg: #fff3d6;
+  --red: #A6192E;
+  --red-bg: #fceaed;
+  --blue: #0085CA;
+  --blue-bg: #ddf1fc;
+  --blue-dark: #002B49;
+  --blue-mid: #5E8AB4;
+  --purple: #470858;
+  --purple-bg: #f0e8f3;
+  --pink: #C8187D;
+  --pink-bg: #fde7f5;
+  --teal: #00677F;
+  --teal-bg: #ddf2f6;
+  --coral: #A6192E;
+  --coral-bg: #fceaed;
+  --gold: #CF7F00;
+  --gold-bg: #fff3d6;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a1520;
+  --surface: #0f2030;
+  --surface2: #162840;
+  --border: rgba(94,138,180,0.15);
+  --border-med: rgba(94,138,180,0.28);
+  --text: #e8f0f8;
+  --text2: #9ab8d0;
+  --text3: #5e8ab4;
+  --green: #4a9f4b;
+  --green-bg: #0d2e0e;
+  --amber: #e09b3a;
+  --amber-bg: #2e1e00;
+  --red: #d43050;
+  --red-bg: #2e0812;
+  --blue: #0085CA;
+  --blue-bg: #002b49;
+  --blue-dark: #5E8AB4;
+  --blue-mid: #3a6a94;
+  --purple: #8a3faa;
+  --purple-bg: #1e0a28;
+  --pink: #e8419a;
+  --pink-bg: #2e0a20;
+  --teal: #00a8c8;
+  --teal-bg: #002030;
+  --coral: #d43050;
+  --coral-bg: #2e0812;
+  --gold: #F9C20A;
+  --gold-bg: #2a1e00;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { transition: background 0.2s, color 0.2s; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
+  font-size: 14px;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+input[type="date"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] input[type="date"] {
+  color-scheme: dark;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-med); border-radius: 3px; }

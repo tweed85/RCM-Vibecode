@@ -1,0 +1,357 @@
+.row {
+  border-top: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.row:hover { background: var(--surface2); }
+
+.done { opacity: 0.65; }
+
+.overdue {
+  border-left: 3px solid var(--red);
+}
+
+.overdueTag {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--red);
+  background: var(--red-bg);
+  padding: 1px 6px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0;
+}
+
+/* Fixed-width slots so every row has the same column positions */
+.slotDate {
+  width: 130px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+  flex-shrink: 0;
+}
+
+.slotOwner {
+  width: 88px;
+  display: flex;
+  justify-content: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.slotBadges {
+  width: 150px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  padding-right: 8px;
+  flex-shrink: 0;
+}
+
+.slotActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.reorder {
+  font-size: 9px;
+  padding: 0 3px;
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.reorder:hover { color: var(--text); }
+.reorder:disabled { opacity: 0.2; cursor: default; }
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: #0085CA;
+}
+
+.text {
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text:hover { color: var(--blue); }
+
+.strikethrough {
+  text-decoration: line-through;
+  color: var(--text3) !important;
+}
+
+.meta {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.datePill {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ownerPill {
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+
+.raidBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--red-bg);
+  color: var(--red);
+  border-radius: 4px;
+  padding: 2px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.decBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--amber-bg);
+  color: var(--amber);
+  border-radius: 4px;
+  padding: 2px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.predBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--surface2);
+  color: var(--text3);
+  border-radius: 4px;
+  padding: 2px 5px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text3);
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+
+.iconBtn:hover {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.iconBtnActive {
+  color: var(--blue) !important;
+}
+
+.iconBtnDanger {
+  composes: iconBtn;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.iconBtnDanger:hover {
+  color: var(--red) !important;
+}
+
+/* Note area */
+.noteArea {
+  padding: 6px 48px 10px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+}
+
+.noteText {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  cursor: pointer;
+  min-height: 24px;
+}
+
+.noteInput {
+  flex: 1;
+  padding: 6px 9px;
+  font-size: 12px;
+  border: 1px solid var(--border-med);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+}
+
+/* Predecessor panel */
+.predPanel {
+  padding: 10px 48px 10px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+}
+
+.predTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.predItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text2);
+  padding: 3px 0;
+  gap: 8px;
+}
+
+.predSelect {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-med);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Subtask area */
+.subtaskArea {
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+}
+
+.addSubRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 48px 8px;
+}
+
+.addSubInput {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border-med);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.addSubBtn {
+  display: block;
+  width: 100%;
+  padding: 6px 48px;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text3);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.addSubBtn:hover { color: var(--blue); }
+
+/* Shared small buttons */
+.btnSm {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: #0085CA;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btnSmGhost {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: transparent;
+  color: var(--text3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btnSmDanger {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: transparent;
+  color: var(--red);
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  cursor: pointer;
+}

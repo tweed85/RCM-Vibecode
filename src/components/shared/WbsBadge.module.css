@@ -1,0 +1,16 @@
+.badge {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: monospace;
+  flex-shrink: 0;
+  padding: 1px 5px;
+  background: var(--surface2);
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.small {
+  font-size: 9px;
+}

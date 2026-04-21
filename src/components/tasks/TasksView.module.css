@@ -1,0 +1,78 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  border: 1px solid var(--border-med);
+  cursor: pointer;
+  background: transparent;
+  color: var(--text2);
+  transition: all 0.12s;
+}
+
+.chip:hover { background: var(--surface2); }
+
+.chipActive {
+  background: #002B49 !important;
+  border-color: #002B49 !important;
+  color: white !important;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text3);
+  font-size: 14px;
+}
+
+.btnPrimary {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: #0085CA;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btnPrimary:hover { background: #006fa8; }
+
+.btnGhost {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.btnGhost:hover { background: var(--surface2); }

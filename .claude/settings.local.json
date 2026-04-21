@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" --version 2>&1)",
+      "PowerShell(& \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" --version 2>&1)",
+      "Bash(python3 -c ' *)",
+      "Bash(npm --version)",
+      "PowerShell(npm --version 2>&1)",
+      "PowerShell(node --version 2>&1)",
+      "Bash('/c/Program Files/nodejs/node.exe' -e ' *)"
+    ]
+  }
+}

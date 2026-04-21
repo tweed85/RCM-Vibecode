@@ -1,0 +1,135 @@
+.topbar {
+  background: #002B49;
+  border-bottom: 1px solid rgba(0,43,73,0.3);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 12px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+}
+
+.logo {
+  height: 38px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 6px;
+  padding: 3px 7px;
+}
+
+.meridianTitle {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  padding: 0 16px 0 12px;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  margin-right: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.projSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.projSelect {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #002B49;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  max-width: 360px;
+  outline: none;
+  border-radius: 4px;
+}
+
+.projSelect option {
+  background: #002B49;
+  color: #ffffff;
+  font-weight: normal;
+}
+
+.ehrBadge {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-family: monospace;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+}
+
+.projBadge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.projBadge:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  cursor: pointer;
+  color: rgba(255,255,255,0.85);
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.btnDanger {
+  color: rgba(255, 140, 140, 0.9) !important;
+  border-color: rgba(255, 100, 100, 0.3) !important;
+  font-size: 12px !important;
+}
+
+.btnDanger:hover {
+  background: rgba(180, 0, 0, 0.25) !important;
+  color: white !important;
+}
+
+.separator {
+  width: 1px;
+  height: 22px;
+  background: rgba(255,255,255,0.18);
+  flex-shrink: 0;
+}

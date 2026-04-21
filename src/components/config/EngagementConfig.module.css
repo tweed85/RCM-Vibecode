@@ -1,0 +1,93 @@
+.page {
+  max-width: 960px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.fieldGroup {
+  margin-bottom: 12px;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+
+.addBtn {
+  font-size: 12px;
+  padding: 4px 12px;
+  background: transparent;
+  border: 1px solid var(--border-med);
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--blue);
+}
+
+.addBtn:hover { background: var(--surface2); }
+
+.btnPrimary {
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 6px;
+  background: #0085CA;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btnPrimary:hover { background: #006fa8; }
+
+@media (max-width: 800px) {
+  .grid { grid-template-columns: 1fr; }
+}

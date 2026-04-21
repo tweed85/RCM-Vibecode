@@ -1,0 +1,178 @@
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.metricCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+
+.metricLabel {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+
+.metricValue {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.metricSub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  border: 1px solid var(--border-med);
+  cursor: pointer;
+  background: transparent;
+  color: var(--text2);
+  transition: all 0.12s;
+}
+
+.chip:hover { background: var(--surface2); }
+
+.chipActive {
+  background: #002B49 !important;
+  border-color: #002B49 !important;
+  color: white !important;
+}
+
+.milestoneCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.milestoneCard:hover {
+  border-color: var(--border-med);
+  box-shadow: 0 2px 12px rgba(0,43,73,0.08);
+}
+
+.milestoneHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.milestoneHeader:hover { background: var(--surface2); }
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.msTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+
+.msMeta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ownerPill {
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.msBtn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border: 1px solid var(--border-med);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text2);
+}
+
+.msBtn:hover { background: var(--surface2); }
+
+.msFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text3);
+}
+
+.btnPrimary {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: #0085CA;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btnPrimary:hover { background: #006fa8; }
+
+@media (max-width: 900px) {
+  .metricsRow { grid-template-columns: repeat(2, 1fr); }
+}
