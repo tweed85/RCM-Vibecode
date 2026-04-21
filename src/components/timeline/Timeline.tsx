@@ -190,7 +190,6 @@ export function Timeline() {
             return (
               <div key={m.id}>
                 <div className={styles.milestoneLabel} style={{ borderLeft: `3px solid ${wc}` }}>
-                  <div className={styles.statusDot} style={{ background: statusColors[m.status] }} />
                   <span className={styles.msLabelText}>{m.title}</span>
                 </div>
                 {m.tasks.map(t => (

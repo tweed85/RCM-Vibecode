@@ -50,69 +50,62 @@ export function SubtaskRow({ subtask: st, sIdx, mIdx, tIdx, milestoneId, taskId,
 
   return (
     <div className={`${styles.row} ${st.done ? styles.done : ''}`}>
-      <input
-        type="checkbox"
-        className={styles.checkbox}
-        checked={st.done}
-        onChange={() => toggleSubtask(milestoneId, taskId, st.id)}
-      />
-      <WbsBadge wbs={getWbs(mIdx, tIdx, sIdx)} small />
-
-      {editing ? (
+      <div className={styles.left}>
         <input
-          autoFocus
-          className={styles.editInput}
-          value={val}
-          onChange={e => setVal(e.target.value)}
-          onBlur={save}
-          onKeyDown={e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') { setEditing(false); setVal(st.text); } }}
+          type="checkbox"
+          className={styles.checkbox}
+          checked={st.done}
+          onChange={() => toggleSubtask(milestoneId, taskId, st.id)}
         />
-      ) : (
-        <span
-          className={`${styles.text} ${st.done ? styles.strikethrough : ''}`}
-          onDoubleClick={() => setEditing(true)}
-          title="Double-click to edit"
-        >
-          {st.text}
-        </span>
-      )}
+        <WbsBadge wbs={getWbs(mIdx, tIdx, sIdx)} small />
+        {editing ? (
+          <input
+            autoFocus
+            className={styles.editInput}
+            value={val}
+            onChange={e => setVal(e.target.value)}
+            onBlur={save}
+            onKeyDown={e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') { setEditing(false); setVal(st.text); } }}
+          />
+        ) : (
+          <span
+            className={`${styles.text} ${st.done ? styles.strikethrough : ''}`}
+            onDoubleClick={() => setEditing(true)}
+            title="Double-click to edit"
+          >
+            {st.text}
+          </span>
+        )}
+      </div>
 
-      {editingDates ? (
-        <div className={styles.dateInputs}>
-          <input
-            type="date"
-            className={styles.dateInput}
-            defaultValue={st.startDate}
-            placeholder={taskStartDate}
-            onBlur={e => saveDate('startDate', e.target.value)}
-          />
-          <span className={styles.dateSep}>–</span>
-          <input
-            type="date"
-            className={styles.dateInput}
-            defaultValue={st.endDate}
-            placeholder={taskEndDate}
-            onBlur={e => { saveDate('endDate', e.target.value); }}
-          />
-          <button className={styles.dateClose} onClick={() => setEditingDates(false)}>✕</button>
+      <div className={styles.right}>
+        <div className={styles.slotDate}>
+          {editingDates ? (
+            <div className={styles.dateInputs}>
+              <input type="date" className={styles.dateInput} defaultValue={st.startDate} placeholder={taskStartDate} onBlur={e => saveDate('startDate', e.target.value)} />
+              <span className={styles.dateSep}>–</span>
+              <input type="date" className={styles.dateInput} defaultValue={st.endDate} placeholder={taskEndDate} onBlur={e => saveDate('endDate', e.target.value)} />
+              <button className={styles.dateClose} onClick={() => setEditingDates(false)}>✕</button>
+            </div>
+          ) : (
+            <span
+              className={`${styles.dateDisplay} ${inherited ? styles.dateInherited : ''}`}
+              onClick={() => setEditingDates(true)}
+              title={inherited ? 'Using parent task dates — click to set own dates' : 'Click to edit dates'}
+            >
+              {display || <span className={styles.dateEmpty}>set dates</span>}
+            </span>
+          )}
         </div>
-      ) : (
-        <span
-          className={`${styles.dateDisplay} ${inherited ? styles.dateInherited : ''}`}
-          onClick={() => setEditingDates(true)}
-          title={inherited ? 'Using parent task dates — click to set own dates' : 'Click to edit dates'}
-        >
-          {display || <span className={styles.dateEmpty}>set dates</span>}
-        </span>
-      )}
 
-      {st.owner && <span className={styles.owner}>{st.owner}</span>}
+        <div className={styles.slotOwner}>
+          {st.owner && <span className={styles.ownerPill}>{st.owner}</span>}
+        </div>
 
-      <button
-        className={styles.del}
-        onClick={() => deleteSubtask(milestoneId, taskId, st.id)}
-        title="Delete subtask"
-      >×</button>
+        <div className={styles.slotActions}>
+          <button className={styles.del} onClick={() => deleteSubtask(milestoneId, taskId, st.id)} title="Delete subtask">×</button>
+        </div>
+      </div>
     </div>
   );
 }
