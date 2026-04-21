@@ -2,6 +2,7 @@ import type { AppState } from '../store/types';
 
 export const DEFAULT_STATE: AppState = {
   activeProject: 0,
+  supabaseIds: [],
   projects: [
     {
       config: {

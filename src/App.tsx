@@ -10,9 +10,12 @@ import { RaidLog } from './components/raid/RaidLog';
 import { DecisionLog } from './components/decisions/DecisionLog';
 import { EngagementConfig } from './components/config/EngagementConfig';
 import { AddMilestone } from './components/milestones/AddMilestone';
+import { AuthScreen } from './components/auth/AuthScreen';
+import { useAuth } from './hooks/useAuth';
+import { useSupabaseSync } from './hooks/useSupabaseSync';
 import styles from './App.module.css';
 
-export default function App() {
+function AppShell() {
   return (
     <>
       <Topbar />
@@ -36,4 +39,19 @@ export default function App() {
       <Toast />
     </>
   );
+}
+
+export default function App() {
+  const { user, loading } = useAuth();
+  useSupabaseSync(user);
+
+  if (loading) return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+      <div style={{ fontSize: 13, color: 'var(--text3)' }}>Loading…</div>
+    </div>
+  );
+
+  if (!user) return <AuthScreen />;
+
+  return <AppShell />;
 }

@@ -1,0 +1,152 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.panel {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px 32px;
+  box-shadow: 0 4px 24px rgba(0, 43, 73, 0.10);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  height: 36px;
+  background: #002B49;
+  border-radius: 6px;
+  padding: 3px 7px;
+}
+
+.appName {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.appSub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 1px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.tab {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text3);
+  transition: all 0.15s;
+}
+
+.tabActive {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0, 43, 73, 0.10);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.resetNote {
+  font-size: 13px;
+  color: var(--text3);
+  margin: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.input {
+  padding: 9px 12px;
+  font-size: 14px;
+  border: 1px solid var(--border-med);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--red);
+  margin: 0;
+}
+
+.success {
+  font-size: 13px;
+  color: var(--green);
+  margin: 0;
+}
+
+.submit {
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #002B49;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+
+.submit:hover { background: #0085CA; }
+.submit:disabled { opacity: 0.55; cursor: default; }
+
+.link {
+  font-size: 12px;
+  color: var(--text3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+}
+
+.link:hover { color: var(--blue); }

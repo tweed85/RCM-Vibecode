@@ -57,6 +57,11 @@ interface ProjectStore extends AppState {
   // Helpers
   currentProject: () => Project;
   resetToDefaults: () => void;
+
+  // Supabase sync
+  setSupabaseId: (idx: number, id: string) => void;
+  replaceProject: (idx: number, data: Project) => void;
+  setProjects: (projects: Project[], ids: string[]) => void;
 }
 
 function autoUpdateMilestoneStatus(m: Milestone) {
@@ -405,6 +410,20 @@ export const useProjectStore = create<ProjectStore>()(
         }),
 
       resetToDefaults: () => set({ ...DEFAULT_STATE }),
+
+      setSupabaseId: (idx, id) => set(s => {
+        const ids = [...s.supabaseIds];
+        ids[idx] = id;
+        return { supabaseIds: ids };
+      }),
+
+      replaceProject: (idx, data) => set(s => {
+        const projects = [...s.projects];
+        projects[idx] = data;
+        return { projects };
+      }),
+
+      setProjects: (projects, ids) => set({ projects, supabaseIds: ids, activeProject: 0 }),
     }),
     {
       name: LS_KEY,

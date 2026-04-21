@@ -1,6 +1,7 @@
 export interface AppState {
   activeProject: number;
   projects: Project[];
+  supabaseIds: string[]; // parallel array — supabaseIds[i] is the Supabase UUID for projects[i]
 }
 
 export interface Project {
