@@ -34,7 +34,7 @@ export const DEFAULT_STATE: AppState = {
       },
       milestones: [
         {
-          id: 1, title: 'Prior authorization workflow consolidation',
+          id: '10000000-0000-0000-0000-000000000001', title: 'Prior authorization workflow consolidation',
           workstream: 'auth', status: 'inprogress', owner: 'Auth Lead', dueDate: '2026-04-30',
           tasks: [
             { id: 'a1', text: 'Map current authorization responsibility by payer and specialty', done: true,  startDate: '2026-01-06', endDate: '2026-01-17', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
@@ -53,7 +53,7 @@ export const DEFAULT_STATE: AppState = {
           noteExport: true,
         },
         {
-          id: 2, title: 'AR aging acceleration – 90+ day bucket remediation',
+          id: '10000000-0000-0000-0000-000000000002', title: 'AR aging acceleration – 90+ day bucket remediation',
           workstream: 'ar', status: 'atrisk', owner: 'AR Manager', dueDate: '2026-04-15',
           tasks: [
             { id: 'b1', text: 'Stratify AR aging by payer, service line, and denial reason', done: true,  startDate: '2026-01-06', endDate: '2026-01-23', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
@@ -71,7 +71,7 @@ export const DEFAULT_STATE: AppState = {
           noteExport: true,
         },
         {
-          id: 3, title: 'Front-end eligibility and clean claim rate improvement',
+          id: '10000000-0000-0000-0000-000000000003', title: 'Front-end eligibility and clean claim rate improvement',
           workstream: 'access', status: 'inprogress', owner: 'Patient Access Dir.', dueDate: '2026-05-15',
           tasks: [
             { id: 'c1', text: 'Baseline front-end denial rate by category (eligibility, COB, auth not obtained)', done: true,  startDate: '2026-01-06', endDate: '2026-01-23', note: '', owner: 'James Okafor', subtasks: [], predecessors: [] },
@@ -88,7 +88,7 @@ export const DEFAULT_STATE: AppState = {
           note: '', noteExport: false,
         },
         {
-          id: 4, title: 'Medical necessity denial reduction program',
+          id: '10000000-0000-0000-0000-000000000004', title: 'Medical necessity denial reduction program',
           workstream: 'billing', status: 'notstarted', owner: 'Billing Director', dueDate: '2026-06-01',
           tasks: [
             { id: 'd1', text: 'Pull and validate medical necessity denial data from remittance files', done: false, startDate: '2026-03-03', endDate: '2026-03-21', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
@@ -105,7 +105,7 @@ export const DEFAULT_STATE: AppState = {
           note: '', noteExport: false,
         },
         {
-          id: 5, title: 'Charge capture and missing charges audit',
+          id: '10000000-0000-0000-0000-000000000005', title: 'Charge capture and missing charges audit',
           workstream: 'coding', status: 'complete', owner: 'HIM / Coding', dueDate: '2026-03-15',
           tasks: [
             { id: 'e1', text: 'Identify departments with highest DNFB and late charge rates', done: true, startDate: '2026-01-05', endDate: '2026-01-23', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
@@ -168,7 +168,7 @@ export const DEFAULT_STATE: AppState = {
       },
       milestones: [
         {
-          id: 10, title: 'Denial root cause analysis and segmentation',
+          id: '20000000-0000-0000-0000-000000000010', title: 'Denial root cause analysis and segmentation',
           workstream: 'denials', status: 'complete', owner: 'Denial Manager', dueDate: '2026-01-31',
           tasks: [
             { id: 'p1', text: 'Pull 12-month denial data and stratify by CARC/RARC code', done: true, startDate: '2025-11-10', endDate: '2025-11-28', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
@@ -185,7 +185,7 @@ export const DEFAULT_STATE: AppState = {
           noteExport: true,
         },
         {
-          id: 11, title: 'Auth Not Obtained denial prevention program',
+          id: '20000000-0000-0000-0000-000000000011', title: 'Auth Not Obtained denial prevention program',
           workstream: 'denials', status: 'atrisk', owner: 'Auth Lead', dueDate: '2026-04-01',
           tasks: [
             { id: 'q1', text: 'Identify procedures requiring auth that currently have no auth workflow', done: true,  startDate: '2026-01-05', endDate: '2026-01-23', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
@@ -202,7 +202,7 @@ export const DEFAULT_STATE: AppState = {
           noteExport: true,
         },
         {
-          id: 12, title: 'Medical necessity and clinical documentation improvement',
+          id: '20000000-0000-0000-0000-000000000012', title: 'Medical necessity and clinical documentation improvement',
           workstream: 'coding', status: 'inprogress', owner: 'HIM / Coding', dueDate: '2026-05-01',
           tasks: [
             { id: 'r1', text: 'Stratify medical necessity denials by DRG, payer, and attending', done: true,  startDate: '2026-01-05', endDate: '2026-01-23', note: '', owner: 'Tina Guerrero', subtasks: [], predecessors: [] },
@@ -219,7 +219,7 @@ export const DEFAULT_STATE: AppState = {
           note: '', noteExport: false,
         },
         {
-          id: 13, title: 'Appeals workflow and overturn rate optimization',
+          id: '20000000-0000-0000-0000-000000000013', title: 'Appeals workflow and overturn rate optimization',
           workstream: 'appeals', status: 'inprogress', owner: 'Billing Director', dueDate: '2026-05-15',
           tasks: [
             { id: 's1', text: 'Audit current appeals process and overturn rate by payer and denial category', done: true,  startDate: '2026-01-05', endDate: '2026-01-31', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
@@ -236,7 +236,7 @@ export const DEFAULT_STATE: AppState = {
           note: '', noteExport: false,
         },
         {
-          id: 14, title: 'Payer contract and reimbursement rate review',
+          id: '20000000-0000-0000-0000-000000000014', title: 'Payer contract and reimbursement rate review',
           workstream: 'payer', status: 'notstarted', owner: 'Billing Director', dueDate: '2026-06-30',
           tasks: [
             { id: 't1', text: 'Compile current payer contract terms and fee schedule matrix', done: false, startDate: '2026-04-06', endDate: '2026-04-24', note: '', owner: 'Rachel Torres', subtasks: [], predecessors: [] },
@@ -294,7 +294,7 @@ export const DEFAULT_STATE: AppState = {
       },
       milestones: [
         {
-          id: 20, title: 'Missing charge identification and revenue quantification',
+          id: '30000000-0000-0000-0000-000000000020', title: 'Missing charge identification and revenue quantification',
           workstream: 'capture', status: 'complete', owner: 'Charge Capture Lead', dueDate: '2026-03-14',
           tasks: [
             { id: 'v1', text: 'Pull charge and encounter data for 12-month lookback period', done: true, startDate: '2026-02-02', endDate: '2026-02-13', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
@@ -312,7 +312,7 @@ export const DEFAULT_STATE: AppState = {
           noteExport: true,
         },
         {
-          id: 21, title: 'Coding accuracy and DRG optimization review',
+          id: '30000000-0000-0000-0000-000000000021', title: 'Coding accuracy and DRG optimization review',
           workstream: 'coding', status: 'inprogress', owner: 'Coding Manager', dueDate: '2026-04-18',
           tasks: [
             { id: 'w1', text: 'Sample and review inpatient coding accuracy across high-volume DRGs', done: true,  startDate: '2026-02-16', endDate: '2026-03-06', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
@@ -330,7 +330,7 @@ export const DEFAULT_STATE: AppState = {
           noteExport: true,
         },
         {
-          id: 22, title: 'CDI program effectiveness assessment',
+          id: '30000000-0000-0000-0000-000000000022', title: 'CDI program effectiveness assessment',
           workstream: 'cdi', status: 'inprogress', owner: 'CDI Manager', dueDate: '2026-04-30',
           tasks: [
             { id: 'x1', text: 'Assess current CDI query rate, response rate, and agreement rate', done: true,  startDate: '2026-02-16', endDate: '2026-02-27', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
@@ -347,7 +347,7 @@ export const DEFAULT_STATE: AppState = {
           note: '', noteExport: false,
         },
         {
-          id: 23, title: 'DNFB reduction and charge submission timeliness',
+          id: '30000000-0000-0000-0000-000000000023', title: 'DNFB reduction and charge submission timeliness',
           workstream: 'dnfb', status: 'notstarted', owner: 'HIM Director', dueDate: '2026-05-30',
           tasks: [
             { id: 'y1', text: 'Establish DNFB baseline by department and benchmark against peers', done: false, startDate: '2026-04-06', endDate: '2026-04-18', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
@@ -363,7 +363,7 @@ export const DEFAULT_STATE: AppState = {
           note: '', noteExport: false,
         },
         {
-          id: 24, title: 'Executive benchmarking and opportunity summary',
+          id: '30000000-0000-0000-0000-000000000024', title: 'Executive benchmarking and opportunity summary',
           workstream: 'benchmark', status: 'notstarted', owner: 'CFO / Finance', dueDate: '2026-06-13',
           tasks: [
             { id: 'z1', text: 'Compile all workstream findings into integrated opportunity model', done: false, startDate: '2026-05-18', endDate: '2026-05-29', note: '', owner: 'Lisa Park', subtasks: [], predecessors: [] },

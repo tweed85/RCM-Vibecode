@@ -10,7 +10,7 @@ interface Props {
   sIdx: number;
   mIdx: number;
   tIdx: number;
-  milestoneId: number;
+  milestoneId: string;
   taskId: string;
   taskStartDate?: string;
   taskEndDate?: string;

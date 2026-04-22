@@ -8,7 +8,7 @@ export interface Project {
   config: ProjectConfig;
   milestones: Milestone[];
   activeFilter: string;
-  editingId: number | null;
+  editingId: string | null;
   activeRaidTab: 'all' | 'risk' | 'action' | 'issue' | 'dependency';
   raid: RaidItem[];
   decisions: DecisionItem[];
@@ -50,7 +50,7 @@ export interface Workstream {
 export type MilestoneStatus = 'notstarted' | 'inprogress' | 'atrisk' | 'complete';
 
 export interface Milestone {
-  id: number;
+  id: string;
   title: string;
   workstream: string;
   status: MilestoneStatus;
@@ -133,7 +133,7 @@ export interface DecisionItem {
 
 export interface FlatTask {
   tid: string;
-  mid: number;
+  mid: string;
   wbs: string;
   text: string;
   milestoneTitle: string;

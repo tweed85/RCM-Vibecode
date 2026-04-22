@@ -27,11 +27,11 @@ export function AddMilestone() {
   const milestones = proj.milestones;
   const location = useLocation();
   const navigate = useNavigate();
-  const editId = (location.state as { editId?: number })?.editId ?? null;
+  const editId = (location.state as { editId?: string })?.editId ?? null;
   const editCardRef = useRef<HTMLDivElement | null>(null);
 
   const [form, setForm] = useState<Omit<Milestone, 'id'>>({ ...BLANK_MILESTONE });
-  const [editingId, setEditingId] = useState<number | null>(editId);
+  const [editingId, setEditingId] = useState<string | null>(editId);
   const [impactRows, setImpactRows] = useState<ImpactItem[]>([{ type: '', projected: '', realized: '' }]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export function AddMilestone() {
     resetForm();
   }
 
-  function handleDelete(id: number) {
+  function handleDelete(id: string) {
     deleteMilestone(id);
     if (editingId === id) resetForm();
     showToast('Milestone deleted');

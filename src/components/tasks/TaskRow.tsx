@@ -12,7 +12,7 @@ interface Props {
   task: Task;
   tIdx: number;
   mIdx: number;
-  milestoneId: number;
+  milestoneId: string;
   allTasks: Task[];
 }
 

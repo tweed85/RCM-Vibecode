@@ -26,23 +26,23 @@ interface ProjectStore extends AppState {
 
   // Milestone CRUD
   addMilestone: (ms: Omit<Milestone, 'id'>) => void;
-  updateMilestone: (id: number, updates: Partial<Milestone>) => void;
-  deleteMilestone: (id: number) => void;
+  updateMilestone: (id: string, updates: Partial<Milestone>) => void;
+  deleteMilestone: (id: string) => void;
 
   // Task operations
-  addTask: (milestoneId: number, task: Omit<Task, 'id'>) => void;
-  toggleTask: (milestoneId: number, taskId: string) => void;
-  updateTask: (milestoneId: number, taskId: string, updates: Partial<Task>) => void;
-  deleteTask: (milestoneId: number, taskId: string) => void;
-  moveTask: (milestoneId: number, taskId: string, direction: -1 | 1) => void;
-  addPredecessor: (milestoneId: number, taskId: string, predId: string) => void;
-  removePredecessor: (milestoneId: number, taskId: string, predId: string) => void;
+  addTask: (milestoneId: string, task: Omit<Task, 'id'>) => void;
+  toggleTask: (milestoneId: string, taskId: string) => void;
+  updateTask: (milestoneId: string, taskId: string, updates: Partial<Task>) => void;
+  deleteTask: (milestoneId: string, taskId: string) => void;
+  moveTask: (milestoneId: string, taskId: string, direction: -1 | 1) => void;
+  addPredecessor: (milestoneId: string, taskId: string, predId: string) => void;
+  removePredecessor: (milestoneId: string, taskId: string, predId: string) => void;
 
   // Subtask operations
-  addSubtask: (milestoneId: number, taskId: string, subtask: Omit<Subtask, 'id'>) => void;
-  toggleSubtask: (milestoneId: number, taskId: string, subtaskId: string) => void;
-  updateSubtask: (milestoneId: number, taskId: string, subtaskId: string, updates: Partial<Subtask>) => void;
-  deleteSubtask: (milestoneId: number, taskId: string, subtaskId: string) => void;
+  addSubtask: (milestoneId: string, taskId: string, subtask: Omit<Subtask, 'id'>) => void;
+  toggleSubtask: (milestoneId: string, taskId: string, subtaskId: string) => void;
+  updateSubtask: (milestoneId: string, taskId: string, subtaskId: string, updates: Partial<Subtask>) => void;
+  deleteSubtask: (milestoneId: string, taskId: string, subtaskId: string) => void;
 
   // RAID
   addRaidItem: (item: Omit<RaidItem, 'id'>) => void;
@@ -142,7 +142,7 @@ export const useProjectStore = create<ProjectStore>()(
         set(s => {
           const projects = [...s.projects];
           const proj = { ...projects[s.activeProject] };
-          proj.milestones = [...proj.milestones, { ...ms, id: Date.now() }];
+          proj.milestones = [...proj.milestones, { ...ms, id: uid() }];
           projects[s.activeProject] = proj;
           return { projects };
         }),

@@ -5,6 +5,7 @@ import { THEME_KEY } from '../../constants/enums';
 import { SaveIndicator, triggerSaveIndicator } from './SaveIndicator';
 import { ProjectModal } from '../milestones/ProjectModal';
 import { exportSlide } from '../../utils/export';
+import { supabase } from '../../lib/supabase';
 import styles from './Topbar.module.css';
 
 export { triggerSaveIndicator };
@@ -69,6 +70,7 @@ export function Topbar() {
           </button>
           <div className={styles.separator} />
           <button className={`${styles.btn} ${styles.btnDanger}`} onClick={handleReset} title="Reset all data to defaults">Reset</button>
+          <button className={styles.btn} onClick={() => supabase.auth.signOut()} title="Sign out">Sign Out</button>
           <button className={styles.btn} onClick={() => navigate('/config')}>Configure</button>
           <button className={styles.btn} onClick={() => exportSlide(proj)}>Export Slide</button>
         </div>

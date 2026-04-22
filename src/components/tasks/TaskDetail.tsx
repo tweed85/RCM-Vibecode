@@ -23,7 +23,7 @@ export function TaskDetail() {
   const cfg = proj.config;
 
   // Find the task across all milestones
-  let foundMilestoneId: number | null = null;
+  let foundMilestoneId: string | null = null;
   let foundTask = null;
   let mIdx = 0;
   let tIdx = 0;
