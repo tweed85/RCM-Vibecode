@@ -16,10 +16,3 @@ export function getAllTasksFlat(project: Project): FlatTask[] {
   });
   return result;
 }
-
-export function getLinkedItems(taskId: string, project: Project) {
-  return {
-    raid:      project.raid.filter(r => r.linkedTasks.includes(taskId)),
-    decisions: project.decisions.filter(d => d.linkedTasks.includes(taskId)),
-  };
-}

@@ -18,9 +18,3 @@ export function calcProgress(milestone: Milestone): number {
 export function isOverdue(dueDate: string, status: string): boolean {
   return status !== 'complete' && new Date(dueDate) < new Date();
 }
-
-export function fmtDateShort(d: string): string {
-  if (!d) return '';
-  const dt = new Date(d + 'T00:00:00');
-  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}

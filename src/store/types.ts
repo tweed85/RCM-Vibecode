@@ -8,7 +8,6 @@ export interface Project {
   config: ProjectConfig;
   milestones: Milestone[];
   activeFilter: string;
-  editingId: string | null;
   activeRaidTab: 'all' | 'risk' | 'action' | 'issue' | 'dependency';
   raid: RaidItem[];
   decisions: DecisionItem[];

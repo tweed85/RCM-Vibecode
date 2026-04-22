@@ -78,7 +78,6 @@ function rowToProject(row: Record<string, unknown>): Project {
     },
     milestones,
     activeFilter:       (row.active_filter as string) || 'all',
-    editingId:          null,
     activeRaidTab:      (row.active_raid_tab as Project['activeRaidTab']) || 'all',
     tasksFilterWs:      (row.tasks_filter_ws as string) || 'all',
     tasksFilterStatus:  (row.tasks_filter_status as Project['tasksFilterStatus']) || 'all',

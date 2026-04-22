@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type {
   AppState, Project, ProjectConfig, Milestone, Task, Subtask,
-  RaidItem, DecisionItem, MilestoneStatus,
+  RaidItem, DecisionItem,
 } from './types';
 import { DEFAULT_STATE } from '../constants/defaults';
 import { LS_KEY, LS_VERSION } from '../constants/enums';
@@ -60,7 +60,6 @@ interface ProjectStore extends AppState {
 
   // Supabase sync
   setSupabaseId: (idx: number, id: string) => void;
-  replaceProject: (idx: number, data: Project) => void;
   setProjects: (projects: Project[], ids: string[]) => void;
 }
 
@@ -417,12 +416,6 @@ export const useProjectStore = create<ProjectStore>()(
         return { supabaseIds: ids };
       }),
 
-      replaceProject: (idx, data) => set(s => {
-        const projects = [...s.projects];
-        projects[idx] = data;
-        return { projects };
-      }),
-
       setProjects: (projects, ids) => set({ projects, supabaseIds: ids, activeProject: 0 }),
     }),
     {
@@ -445,18 +438,3 @@ export const useProjectStore = create<ProjectStore>()(
   )
 );
 
-// Selector helpers
-export const selectProject = (s: ProjectStore) => s.projects[s.activeProject];
-export const selectConfig  = (s: ProjectStore) => s.projects[s.activeProject].config;
-export const selectMilestones = (s: ProjectStore) => s.projects[s.activeProject].milestones;
-
-// Update milestone status field directly (for Edit modal)
-export function getStatusClass(status: MilestoneStatus | string): string {
-  const map: Record<string, string> = {
-    complete:   'proj-status-complete',
-    inprogress: 'proj-status-inprogress',
-    notstarted: 'proj-status-notstarted',
-    atrisk:     'proj-status-atrisk',
-  };
-  return map[status] ?? '';
-}
