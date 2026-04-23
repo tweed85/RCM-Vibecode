@@ -69,7 +69,11 @@ export function Topbar() {
           </button>
           <div className={styles.separator} />
           <button className={`${styles.btn} ${styles.btnDanger}`} onClick={handleReset} title="Reset all data to defaults">Reset</button>
-          <button className={styles.btn} onClick={() => supabase.auth.signOut()} title="Sign out">Sign Out</button>
+          <button className={styles.btn} onClick={async () => {
+            await supabase.auth.signOut();
+            resetToDefaults();
+            window.location.href = '/';
+          }} title="Sign out">Sign Out</button>
           <button className={styles.btn} onClick={() => navigate('/config')}>Configure</button>
           <button className={styles.btn} onClick={() => exportSlide(proj)}>Export Slide</button>
           <div className={styles.separator} />
