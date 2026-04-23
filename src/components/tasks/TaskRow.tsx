@@ -22,9 +22,18 @@ function getToday() {
   return d;
 }
 
-const IconNote = () => (
+const IconEdit = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+  </svg>
+);
+
+const IconNote = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="4" y="2" width="14" height="20" rx="2"/>
+    <line x1="8" y1="7" x2="16" y2="7"/>
+    <line x1="8" y1="11" x2="16" y2="11"/>
+    <line x1="8" y1="15" x2="12" y2="15"/>
   </svg>
 );
 
@@ -101,7 +110,7 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
   const proj = projects[activeProject];
   const navigate = useNavigate();
 
-  const effectiveDone = t.subtasks?.length
+  const effectiveDone = t.subtasks && t.subtasks.length > 0
     ? t.subtasks.every(s => s.done)
     : t.done;
 
@@ -207,6 +216,12 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
 
           {/* Slot 4: action buttons — always present, separated by divider */}
           <div className={styles.slotActions}>
+            <button
+              className={styles.iconBtn}
+              title="Edit task"
+              onClick={() => navigate(`/tasks/${t.id}`)}
+            ><IconEdit /></button>
+
             <button
               className={`${styles.iconBtn} ${t.note?.trim() ? styles.iconBtnActive : ''}`}
               title={t.note?.trim() ? 'View / edit note' : 'Add note'}

@@ -17,6 +17,7 @@ export function TasksView() {
   const scrollTarget = (location.state as { scrollTo?: string })?.scrollTo;
   const refs = useRef<Record<string, HTMLDivElement | null>>({});
   const [sortBy, setSortBy] = useState<SortBy>('none');
+  const [allOpen, setAllOpen] = useState(true);
   const [forceOpen, setForceOpen] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export function TasksView() {
   if (sortBy === 'workstream') sorted.sort((a, b) => a.workstream.localeCompare(b.workstream));
 
   function toggleCollapseAll(open: boolean) {
+    setAllOpen(open);
     setForceOpen(open);
     setTimeout(() => setForceOpen(undefined), 50);
   }
@@ -57,8 +59,12 @@ export function TasksView() {
           <p className={styles.sub}>{milestones.length} milestones · {milestones.flatMap(m => m.tasks).length} tasks</p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <button className={styles.btnGhost} onClick={() => toggleCollapseAll(false)}>Collapse all</button>
-          <button className={styles.btnGhost} onClick={() => toggleCollapseAll(true)}>Expand all</button>
+          <button className={styles.btnGhost} onClick={() => toggleCollapseAll(!allOpen)} title={allOpen ? 'Collapse all milestones' : 'Expand all milestones'}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 5, verticalAlign: 'middle', transition: 'transform 0.15s', transform: allOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+            {allOpen ? 'Collapse all' : 'Expand all'}
+          </button>
           <button className={styles.btnPrimary} onClick={() => navigate('/milestones')}>+ Add Milestone</button>
         </div>
       </div>

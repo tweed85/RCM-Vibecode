@@ -52,7 +52,11 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
     <div className={styles.group}>
       <div className={styles.header} style={{ borderLeft: `3px solid ${col.text}` }}>
         <div className={styles.headerLeft} onClick={() => setOpen(o => !o)}>
-          <span className={styles.chevron} style={{ transform: open ? 'rotate(90deg)' : '' }}>›</span>
+          <span className={styles.chevron} style={{ transform: open ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </span>
           <WbsBadge wbs={getWbs(mIdx)} />
           <div
             className={styles.statusDot}
@@ -84,6 +88,15 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
             className={styles.btn}
             onClick={e => { e.stopPropagation(); navigate('/milestones', { state: { editId: m.id } }); }}
           >Edit</button>
+          <button
+            className={styles.collapseBtn}
+            onClick={e => { e.stopPropagation(); setOpen(o => !o); }}
+            title={open ? 'Collapse' : 'Expand'}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
         </div>
       </div>
 

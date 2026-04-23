@@ -120,12 +120,6 @@
   color: var(--text3) !important;
 }
 
-.meta {
-  font-size: 11px;
-  color: var(--text3);
-  white-space: nowrap;
-}
-
 .datePill {
   font-size: 11px;
   color: var(--text3);

@@ -224,7 +224,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
     );
     if (msErr) { console.error('Milestones insert error:', msErr); return; }
 
-    const allTasks = proj.milestones.flatMap((m, _mi) =>
+    const allTasks = proj.milestones.flatMap((m) =>
       m.tasks.map((t, ti) => ({
         id:           t.id,
         project_id:   projectId,
@@ -335,6 +335,8 @@ export function useSupabaseSync(user: User | null) {
     initialized.current = true;
 
     (async () => {
+      isHydrating.current = true;
+
       const { data, error } = await supabase
         .from('projects')
         .select(`
@@ -347,9 +349,7 @@ export function useSupabaseSync(user: User | null) {
         `)
         .order('created_at', { ascending: true });
 
-      if (error) { console.error('Supabase load error:', error); return; }
-
-      isHydrating.current = true;
+      if (error) { console.error('Supabase load error:', error); isHydrating.current = false; return; }
 
       if (data && data.length > 0) {
         const projects = (data as Record<string, unknown>[]).map(rowToProject);
@@ -357,10 +357,12 @@ export function useSupabaseSync(user: User | null) {
         store.setProjects(projects, ids);
       } else {
         // First login — migrate local projects to Supabase
+        isHydrating.current = false;
         const localProjects = useProjectStore.getState().projects;
         for (let i = 0; i < localProjects.length; i++) {
           await saveProject(localProjects[i], undefined, i);
         }
+        return;
       }
 
       setTimeout(() => { isHydrating.current = false; }, 0);
@@ -378,6 +380,17 @@ export function useSupabaseSync(user: User | null) {
 
     const unsub = useProjectStore.subscribe(async (state, prev) => {
       if (isHydrating.current) return;
+
+      // Detect deleted projects — supabaseIds shrinks when deleteProject runs
+      if (state.supabaseIds.length < prev.supabaseIds.length) {
+        const removedId = prev.supabaseIds.filter(Boolean).find(id => !state.supabaseIds.includes(id));
+        if (removedId) {
+          supabase.from('projects').delete().eq('id', removedId).then(({ error }) => {
+            if (error) console.error('Project delete error:', error);
+          });
+        }
+        return;
+      }
 
       state.projects.forEach((proj, idx) => {
         if (proj === prev.projects[idx]) return;

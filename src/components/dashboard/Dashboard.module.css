@@ -121,22 +121,24 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  gap: 16px;
+  margin-left: 8px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
 }
 
 /* Fixed-width slots keep each field in the same column across all cards */
 .msSlotWs {
-  width: 130px;
+  width: 140px;
   flex-shrink: 0;
-  padding-right: 10px;
   overflow: hidden;
   display: flex;
   align-items: center;
 }
 
 .msSlotOwner {
-  width: 170px;
+  width: 150px;
   flex-shrink: 0;
-  padding-right: 10px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -144,9 +146,8 @@
 }
 
 .msSlotStatus {
-  width: 90px;
+  width: 100px;
   flex-shrink: 0;
-  padding-right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

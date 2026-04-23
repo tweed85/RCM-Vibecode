@@ -14,7 +14,13 @@
       "Read(//usr/local/**)",
       "PowerShell(cd C:\\\\Users\\\\kmooney\\\\RCM-Vibecode; & \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"node_modules\\\\typescript\\\\bin\\\\tsc\" --noEmit --ignoreDeprecations 5.0 2>&1 | Where-Object { $_ -notmatch \"module.css|TS2307\" } | Select-Object -First 40)",
       "PowerShell(cd C:\\\\Users\\\\kmooney\\\\RCM-Vibecode; & \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"node_modules\\\\typescript\\\\bin\\\\tsc\" --noEmit --ignoreDeprecations 5.0 2>&1 | Where-Object { $_ -match \"EngagementConfig\" })",
-      "PowerShell(cd C:\\\\Users\\\\kmooney\\\\RCM-Vibecode; & \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"node_modules\\\\typescript\\\\bin\\\\tsc\" --noEmit --ignoreDeprecations 5.0 2>&1 | Where-Object { $_ -match \"importXlsx|useSupabaseSync|EngagementConfig\" } | Where-Object { $_ -notmatch \"TS2307\" })"
+      "PowerShell(cd C:\\\\Users\\\\kmooney\\\\RCM-Vibecode; & \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"node_modules\\\\typescript\\\\bin\\\\tsc\" --noEmit --ignoreDeprecations 5.0 2>&1 | Where-Object { $_ -match \"importXlsx|useSupabaseSync|EngagementConfig\" } | Where-Object { $_ -notmatch \"TS2307\" })",
+      "Bash(npm audit *)",
+      "Bash(git -C c:/Users/kmooney/RCM-Vibecode log --oneline -5)",
+      "Bash(git -C c:/Users/kmooney/RCM-Vibecode rm --cached .env.local)",
+      "Bash(git -C c:/Users/kmooney/RCM-Vibecode status)",
+      "Bash(git -C c:/Users/kmooney/RCM-Vibecode add .gitignore src/components/layout/Topbar.tsx)",
+      "Bash(git -C c:/Users/kmooney/RCM-Vibecode commit -m ' *)"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useProjectStore } from '../../store/useProjectStore';
 import { calcProgress, isOverdue } from '../../utils/progress';
-import { colorMap, statusColors, statusBgColors } from '../../constants/colors';
+import { statusColors, statusBgColors } from '../../constants/colors';
 import { statusLabels } from '../../constants/enums';
 import { ProgressBar } from '../shared/ProgressBar';
 import { WorkstreamBadge } from '../shared/WorkstreamBadge';
@@ -89,7 +89,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      <ImpactSummary milestones={milestones} />
+      {cfg.engagementType !== 'Internal' && <ImpactSummary milestones={milestones} />}
 
       {/* Workstream filter */}
       <div className={styles.filterRow}>
@@ -119,9 +119,7 @@ export function Dashboard() {
         </div>
       ) : (
         filtered.map(m => {
-          const mIdx = milestones.indexOf(m);
           const ws = cfg.workstreams.find(w => w.id === m.workstream) ?? { label: m.workstream, color: 'blue' as const, amOwner: '' };
-          const col = colorMap[ws.color] ?? colorMap.blue;
           const prog = calcProgress(m);
           const od = m.dueDate ? isOverdue(m.dueDate, m.status) : false;
           const ownerLabel = (m.owners ?? []).join(', ');
@@ -146,7 +144,6 @@ export function Dashboard() {
                   </div>
                   <div className={styles.msSlotOwner}>
                     {ownerLabel && <span className={styles.ownerPill} title={ownerLabel}>{ownerLabel}</span>}
-                    {ws.amOwner && <span className={styles.ownerPill} style={{ background: 'var(--blue-bg)', color: 'var(--blue)', border: 'none' }} title={ws.amOwner}>{ws.amOwner}</span>}
                   </div>
                   <div className={styles.msSlotStatus}>
                     <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, fontWeight: 600, whiteSpace: 'nowrap', background: statusBgColors[m.status], color: statusColors[m.status] }}>

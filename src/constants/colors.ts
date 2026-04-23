@@ -42,10 +42,3 @@ export const raidTypeColors: Record<string, { bg: string; text: string }> = {
   issue:      { bg: '#fff3d6', text: '#CF7F00' },
   dependency: { bg: '#f0e8f3', text: '#470858' },
 };
-
-export const raidLinkColors: Record<string, string> = {
-  risk:       '#A6192E',
-  action:     '#0085CA',
-  issue:      '#CF7F00',
-  dependency: '#470858',
-};

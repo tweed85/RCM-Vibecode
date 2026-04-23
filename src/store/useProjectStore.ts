@@ -93,6 +93,7 @@ export const useProjectStore = create<ProjectStore>()(
       addProject: (proj) =>
         set(s => ({
           projects: [...s.projects, proj],
+          supabaseIds: [...s.supabaseIds, ''],
           activeProject: s.projects.length,
         })),
 
@@ -110,8 +111,10 @@ export const useProjectStore = create<ProjectStore>()(
         set(s => {
           if (s.projects.length <= 1) return s;
           const projects = s.projects.filter((_, i) => i !== idx);
+          const supabaseIds = s.supabaseIds.filter((_, i) => i !== idx);
           return {
             projects,
+            supabaseIds,
             activeProject: Math.max(0, s.activeProject - 1),
           };
         }),
@@ -459,7 +462,11 @@ export const useProjectStore = create<ProjectStore>()(
         return { supabaseIds: ids };
       }),
 
-      setProjects: (projects, ids) => set({ projects, supabaseIds: ids, activeProject: 0 }),
+      setProjects: (projects, ids) => set(s => ({
+        projects,
+        supabaseIds: ids,
+        activeProject: s.activeProject < projects.length ? s.activeProject : 0,
+      })),
     }),
     {
       name: LS_KEY,

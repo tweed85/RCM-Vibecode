@@ -66,6 +66,8 @@
 .btnPrimary:hover { background: #006fa8; }
 
 .btnGhost {
+  display: inline-flex;
+  align-items: center;
   font-size: 12px;
   padding: 5px 12px;
   border-radius: 6px;
