@@ -99,7 +99,7 @@ export function SubtaskRow({ subtask: st, sIdx, mIdx, tIdx, milestoneId, taskId,
         </div>
 
         <div className={styles.slotOwner}>
-          {st.owner && <span className={styles.ownerPill}>{st.owner}</span>}
+          {st.owners?.length > 0 && <span className={styles.ownerPill}>{st.owners.join(', ')}</span>}
         </div>
 
         <div className={styles.slotActions}>

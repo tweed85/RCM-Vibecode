@@ -43,7 +43,7 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
   function submitNewTask(e: React.FormEvent) {
     e.preventDefault();
     if (!newTask.trim()) return;
-    addTask(m.id, { text: newTask.trim(), done: false, startDate: '', endDate: '', note: '', owner: '', subtasks: [], predecessors: [] });
+    addTask(m.id, { text: newTask.trim(), done: false, startDate: '', endDate: '', note: '', owners: [], subtasks: [], predecessors: [] });
     setNewTask('');
     setAddingTask(false);
   }
@@ -72,6 +72,9 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
           <span style={{ fontSize: 12, color: doneT === totalT && totalT > 0 ? 'var(--green)' : 'var(--text3)' }}>
             {doneT}/{totalT} tasks
           </span>
+          {m.owners?.length > 0 && (
+            <span style={{ fontSize: 12, color: 'var(--text3)' }}>{m.owners.join(', ')}</span>
+          )}
           {m.dueDate && (
             <span style={{ fontSize: 12, color: od ? 'var(--red)' : 'var(--text3)' }}>
               Due: <strong>{m.dueDate}</strong>{od ? ' ⚠' : ''}

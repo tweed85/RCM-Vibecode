@@ -13,7 +13,7 @@ export const IMPACT_TYPES: ImpactType[] = [
 
 export const EHR_OPTIONS = ['Epic', 'Cerner', 'Meditech', 'Star', 'Allscripts', 'athenahealth', 'Other'] as const;
 
-export const ENGAGEMENT_TYPES = ['Implementation', 'Assessment'] as const;
+export const ENGAGEMENT_TYPES = ['Implementation', 'Assessment', 'Internal'] as const;
 
 export const PROJECT_STATUSES = ['On Track', 'At Risk', 'Off Track', 'Complete'] as const;
 

@@ -6,10 +6,11 @@ import { MILESTONE_STATUSES, statusLabels, IMPACT_TYPES } from '../../constants/
 import type { Milestone, ImpactItem, ImpactType } from '../../store/types';
 import { showToast } from '../layout/Toast';
 import { ConfirmButton } from '../shared/ConfirmButton';
+import { OwnerSelect } from '../shared/OwnerSelect';
 import styles from './AddMilestone.module.css';
 
 const BLANK_MILESTONE: Omit<Milestone, 'id'> = {
-  title: '', workstream: '', status: 'notstarted', owner: '',
+  title: '', workstream: '', status: 'notstarted', owners: [],
   dueDate: '', tasks: [], impact: [], note: '', noteExport: false,
 };
 
@@ -45,7 +46,7 @@ export function AddMilestone() {
 
   function openEdit(m: Milestone) {
     setEditingId(m.id);
-    setForm({ title: m.title, workstream: m.workstream, status: m.status, owner: m.owner, dueDate: m.dueDate, tasks: m.tasks, impact: m.impact, note: m.note, noteExport: m.noteExport });
+    setForm({ title: m.title, workstream: m.workstream, status: m.status, owners: m.owners ?? [], dueDate: m.dueDate, tasks: m.tasks, impact: m.impact, note: m.note, noteExport: m.noteExport });
     setImpactRows(m.impact?.length ? m.impact.map(i => ({ ...i })) : [{ type: '', projected: '', realized: '' }]);
   }
 
@@ -79,8 +80,6 @@ export function AddMilestone() {
     if (editingId === id) resetForm();
     showToast('Milestone deleted');
   }
-
-  const ownerRoles = cfg.roles.map(r => r.key);
 
   return (
     <div className={styles.page}>
@@ -123,10 +122,7 @@ export function AddMilestone() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div className={styles.fieldGroup}>
                 <label className={styles.label}>Owner</label>
-                <select style={fieldStyle} value={form.owner} onChange={e => set('owner', e.target.value)}>
-                  <option value="">— Select —</option>
-                  {ownerRoles.map(r => <option key={r} value={r}>{r}</option>)}
-                </select>
+                <OwnerSelect values={form.owners ?? []} onChange={v => set('owners', v)} />
               </div>
               <div className={styles.fieldGroup}>
                 <label className={styles.label}>Due Date</label>

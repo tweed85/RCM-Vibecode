@@ -5,7 +5,7 @@ import { MilestoneGroup } from './MilestoneGroup';
 import styles from './TasksView.module.css';
 
 type SortBy = 'none' | 'due' | 'status' | 'workstream';
-const STATUS_ORDER = ['inprogress', 'atrisk', 'notstarted', 'onhold', 'complete'];
+const STATUS_ORDER = ['inprogress', 'atrisk', 'notstarted', 'complete'];
 
 export function TasksView() {
   const { projects, activeProject, setTasksFilterWs, setTasksFilterStatus } = useProjectStore();
@@ -14,8 +14,8 @@ export function TasksView() {
   const milestones = proj.milestones;
   const location = useLocation();
   const navigate = useNavigate();
-  const scrollTarget = (location.state as { scrollTo?: number })?.scrollTo;
-  const refs = useRef<Record<number, HTMLDivElement | null>>({});
+  const scrollTarget = (location.state as { scrollTo?: string })?.scrollTo;
+  const refs = useRef<Record<string, HTMLDivElement | null>>({});
   const [sortBy, setSortBy] = useState<SortBy>('none');
   const [forceOpen, setForceOpen] = useState<boolean | undefined>(undefined);
 

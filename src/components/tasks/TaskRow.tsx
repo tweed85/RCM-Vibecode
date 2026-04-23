@@ -16,8 +16,11 @@ interface Props {
   allTasks: Task[];
 }
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+function getToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
 
 const IconNote = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -65,7 +68,7 @@ const IconPredBadge = () => (
 
 function isTaskOverdue(t: Task, done: boolean): boolean {
   if (done || !t.endDate) return false;
-  return new Date(t.endDate + 'T00:00:00') < today;
+  return new Date(t.endDate + 'T00:00:00') < getToday();
 }
 
 function fmtDate(s: string): string {
@@ -114,7 +117,7 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
   function handleAddSubtask(e: React.FormEvent) {
     e.preventDefault();
     if (!addSubText.trim()) return;
-    addSubtask(milestoneId, t.id, { text: addSubText.trim(), done: false, owner: '', startDate: '', endDate: '' });
+    addSubtask(milestoneId, t.id, { text: addSubText.trim(), done: false, owners: [], startDate: '', endDate: '' });
     setAddSubText('');
     setAddingSubtask(false);
   }
@@ -176,7 +179,7 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
 
           {/* Slot 2: owner — fixed width, always present */}
           <div className={styles.slotOwner}>
-            {t.owner && <span className={styles.ownerPill}>{t.owner}</span>}
+            {t.owners?.length > 0 && <span className={styles.ownerPill}>{t.owners.join(', ')}</span>}
           </div>
 
           {/* Slot 3: indicator badges — fixed width, always present */}

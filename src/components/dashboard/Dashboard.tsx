@@ -19,7 +19,7 @@ const PROJECT_STATUS_STYLES: Record<string, { bg: string; color: string; border:
 const PROJECT_STATUS_OPTS = ['On Track', 'At Risk', 'Off Track', 'Complete'];
 
 export function Dashboard() {
-  const [expandedNotes, setExpandedNotes] = useState<Set<number>>(new Set());
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const {
     projects, activeProject,
     setActiveFilter, updateProjectConfig,
@@ -124,8 +124,7 @@ export function Dashboard() {
           const col = colorMap[ws.color] ?? colorMap.blue;
           const prog = calcProgress(m);
           const od = m.dueDate ? isOverdue(m.dueDate, m.status) : false;
-          const ownerRole = cfg.roles.find(r => r.key === m.owner);
-          const ownerLabel = ownerRole ? (ownerRole.clientRole || ownerRole.key) : m.owner;
+          const ownerLabel = (m.owners ?? []).join(', ');
           const totalT = m.tasks.length;
           const doneT = m.tasks.filter(t => { const s = t.subtasks ?? []; return s.length ? s.every(x => x.done) : t.done; }).length;
           const raidLinked = proj.raid.filter(r => r.linkedTasks.some(tid => m.tasks.find(t => t.id === tid)));
@@ -142,13 +141,21 @@ export function Dashboard() {
                 <div className={styles.statusDot} style={{ background: statusColors[m.status] }} />
                 <div className={styles.msTitle}>{m.title}</div>
                 <div className={styles.msMeta}>
-                  <WorkstreamBadge label={ws.label} color={ws.color} />
-                  {ownerLabel && <span className={styles.ownerPill}>{ownerLabel}</span>}
-                  {ws.amOwner && <span className={styles.ownerPill} style={{ background: 'var(--blue-bg)', color: 'var(--blue)', border: 'none' }}>{ws.amOwner}</span>}
-                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, fontWeight: 600, background: statusBgColors[m.status], color: statusColors[m.status] }}>
-                    {statusLabels[m.status]}
-                  </span>
-                  <button className={styles.msBtn} onClick={e => { e.stopPropagation(); navigate('/milestones', { state: { editId: m.id } }); }}>Edit</button>
+                  <div className={styles.msSlotWs}>
+                    <WorkstreamBadge label={ws.label} color={ws.color} />
+                  </div>
+                  <div className={styles.msSlotOwner}>
+                    {ownerLabel && <span className={styles.ownerPill} title={ownerLabel}>{ownerLabel}</span>}
+                    {ws.amOwner && <span className={styles.ownerPill} style={{ background: 'var(--blue-bg)', color: 'var(--blue)', border: 'none' }} title={ws.amOwner}>{ws.amOwner}</span>}
+                  </div>
+                  <div className={styles.msSlotStatus}>
+                    <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, fontWeight: 600, whiteSpace: 'nowrap', background: statusBgColors[m.status], color: statusColors[m.status] }}>
+                      {statusLabels[m.status]}
+                    </span>
+                  </div>
+                  <div className={styles.msSlotEdit}>
+                    <button className={styles.msBtn} onClick={e => { e.stopPropagation(); navigate('/milestones', { state: { editId: m.id } }); }}>Edit</button>
+                  </div>
                 </div>
               </div>
 

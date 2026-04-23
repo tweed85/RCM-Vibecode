@@ -19,6 +19,7 @@ export function Topbar() {
     () => (localStorage.getItem(THEME_KEY) as 'light' | 'dark') ?? 'light'
   );
   const [projectModalMode, setProjectModalMode] = useState<'new' | 'edit' | null>(null);
+  const [showProjMenu, setShowProjMenu] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -53,8 +54,6 @@ export function Topbar() {
               ))}
             </select>
             {ehrLabel && <span className={styles.ehrBadge}>{ehrLabel}</span>}
-            <button className={styles.projBadge} onClick={() => setProjectModalMode('edit')}>Edit</button>
-            <button className={styles.projBadge} onClick={() => setProjectModalMode('new')}>+ New</button>
           </div>
         </div>
 
@@ -73,6 +72,25 @@ export function Topbar() {
           <button className={styles.btn} onClick={() => supabase.auth.signOut()} title="Sign out">Sign Out</button>
           <button className={styles.btn} onClick={() => navigate('/config')}>Configure</button>
           <button className={styles.btn} onClick={() => exportSlide(proj)}>Export Slide</button>
+          <div className={styles.separator} />
+          <div className={styles.projMenuWrap}>
+            <button
+              className={styles.hamburger}
+              title="Project actions"
+              onClick={() => setShowProjMenu(v => !v)}
+            >
+              <span /><span /><span />
+            </button>
+            {showProjMenu && (
+              <>
+                <div className={styles.projMenuBackdrop} onClick={() => setShowProjMenu(false)} />
+                <div className={styles.projMenu}>
+                  <button className={styles.projMenuItem} onClick={() => { setShowProjMenu(false); setProjectModalMode('edit'); }}>Edit project</button>
+                  <button className={styles.projMenuItem} onClick={() => { setShowProjMenu(false); setProjectModalMode('new'); }}>New project</button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </header>
 

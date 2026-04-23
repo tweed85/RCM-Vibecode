@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useProjectStore } from '../../store/useProjectStore';
 import { EHR_OPTIONS, ENGAGEMENT_TYPES } from '../../constants/enums';
 import { uid } from '../../utils/uid';
-import type { ProjectConfig } from '../../store/types';
+import { parseSmartsheetXlsx } from '../../utils/importXlsx';
+import type { ProjectConfig, Milestone } from '../../store/types';
 
 interface Props {
   mode: 'new' | 'edit';
@@ -22,6 +24,7 @@ const BLANK_CONFIG: ProjectConfig = {
   denials: [],
   roles: [],
   workstreams: [{ id: uid(), label: 'Workstream 1', color: 'blue', amOwner: '' }],
+  clientRoster: [],
 };
 
 const overlay: React.CSSProperties = {
@@ -56,16 +59,27 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+type ImportState =
+  | { stage: 'idle' }
+  | { stage: 'parsing' }
+  | { stage: 'done'; milestones: Milestone[]; warnings: string[] }
+  | { stage: 'error'; message: string };
+
 export function ProjectModal({ mode, onClose }: Props) {
-  const { projects, activeProject, updateProjectConfig, addProject } = useProjectStore();
+  const { projects, activeProject, updateProjectConfig, addProject, deleteProject, appendMilestonesToProject } = useProjectStore();
+  const navigate = useNavigate();
   const existing = projects[activeProject].config;
 
   const [form, setForm] = useState<ProjectConfig>(
     mode === 'edit' ? { ...existing } : { ...BLANK_CONFIG }
   );
   const [copyFrom, setCopyFrom] = useState<number>(-1);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [importState, setImportState] = useState<ImportState>({ stage: 'idle' });
+  const [dragging, setDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  function set<K extends keyof ProjectConfig>(key: K, val: ProjectConfig[K]) {
+  function setField<K extends keyof ProjectConfig>(key: K, val: ProjectConfig[K]) {
     setForm(f => ({ ...f, [key]: val }));
   }
 
@@ -86,17 +100,48 @@ export function ProjectModal({ mode, onClose }: Props) {
     }
   }
 
+  const handleFile = useCallback(async (file: File) => {
+    if (!file.name.endsWith('.xlsx')) {
+      setImportState({ stage: 'error', message: 'Only .xlsx files are supported.' });
+      return;
+    }
+    setImportState({ stage: 'parsing' });
+    try {
+      const result = await parseSmartsheetXlsx(file);
+      setImportState({ stage: 'done', milestones: result.milestones, warnings: result.warnings });
+    } catch (err) {
+      setImportState({ stage: 'error', message: String(err) });
+    }
+  }, []);
+
+  function onDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.clientName.trim()) return;
+
+    const importedMilestones = importState.stage === 'done' ? importState.milestones : [];
+
     if (mode === 'edit') {
       updateProjectConfig(form);
+      if (importedMilestones.length > 0) {
+        appendMilestonesToProject(activeProject, importedMilestones);
+      }
     } else {
+      // Ensure the 'imported' workstream exists if we have imported milestones
+      const config = { ...form };
+      if (importedMilestones.length > 0 && !config.workstreams.find(w => w.id === 'imported')) {
+        config.workstreams = [...config.workstreams, { id: 'imported', label: 'Imported', color: 'blue', amOwner: '' }];
+      }
       addProject({
-        config: form,
-        milestones: [],
+        config,
+        milestones: importedMilestones,
         activeFilter: 'all',
-        editingId: null,
         activeRaidTab: 'all',
         raid: [],
         decisions: [],
@@ -105,7 +150,13 @@ export function ProjectModal({ mode, onClose }: Props) {
       });
     }
     onClose();
+    navigate('/dashboard');
   }
+
+  const importedCount = importState.stage === 'done' ? importState.milestones.length : 0;
+  const taskCount = importState.stage === 'done'
+    ? importState.milestones.reduce((s, m) => s + m.tasks.length, 0)
+    : 0;
 
   return (
     <div style={overlay} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
@@ -118,18 +169,13 @@ export function ProjectModal({ mode, onClose }: Props) {
             type="button"
             onClick={onClose}
             style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, color: 'var(--text3)', padding: '0 4px' }}
-            title="Close"
           >×</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           {mode === 'new' && projects.length > 0 && (
             <Field label="Copy settings from">
-              <select
-                style={fieldStyle}
-                value={copyFrom}
-                onChange={e => handleCopyFrom(Number(e.target.value))}
-              >
+              <select style={fieldStyle} value={copyFrom} onChange={e => handleCopyFrom(Number(e.target.value))}>
                 <option value={-1}>— Start blank —</option>
                 {projects.map((p, i) => (
                   <option key={i} value={i}>{p.config.clientName}</option>
@@ -142,7 +188,7 @@ export function ProjectModal({ mode, onClose }: Props) {
             <input
               style={fieldStyle}
               value={form.clientName}
-              onChange={e => set('clientName', e.target.value)}
+              onChange={e => setField('clientName', e.target.value)}
               placeholder="e.g. Memorial Health System"
               required
               autoFocus
@@ -150,38 +196,119 @@ export function ProjectModal({ mode, onClose }: Props) {
           </Field>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <Field label="EHR Platform">
-              <select style={fieldStyle} value={form.ehr} onChange={e => set('ehr', e.target.value as ProjectConfig['ehr'])}>
-                {EHR_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
-              </select>
-            </Field>
+            {form.engagementType !== 'Internal' && (
+              <Field label="EHR Platform">
+                <select style={fieldStyle} value={form.ehr} onChange={e => setField('ehr', e.target.value as ProjectConfig['ehr'])}>
+                  {EHR_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                </select>
+              </Field>
+            )}
             <Field label="Engagement Type">
-              <select style={fieldStyle} value={form.engagementType} onChange={e => set('engagementType', e.target.value as ProjectConfig['engagementType'])}>
+              <select
+                style={fieldStyle}
+                value={form.engagementType}
+                onChange={e => {
+                  const t = e.target.value as ProjectConfig['engagementType'];
+                  setField('engagementType', t);
+                  if (t === 'Internal') { setField('ehr', 'Other'); setField('ehrCustom', ''); }
+                }}
+              >
                 {ENGAGEMENT_TYPES.map(o => <option key={o} value={o}>{o}</option>)}
               </select>
             </Field>
           </div>
 
-          {form.ehr === 'Other' && (
+          {form.engagementType !== 'Internal' && form.ehr === 'Other' && (
             <Field label="Custom EHR Name">
-              <input style={fieldStyle} value={form.ehrCustom} onChange={e => set('ehrCustom', e.target.value)} placeholder="EHR name" />
+              <input style={fieldStyle} value={form.ehrCustom} onChange={e => setField('ehrCustom', e.target.value)} placeholder="EHR name" />
             </Field>
           )}
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <Field label="Managing Director">
-              <input style={fieldStyle} value={form.managingDirector} onChange={e => set('managingDirector', e.target.value)} placeholder="Name, title" />
+              <input style={fieldStyle} value={form.managingDirector} onChange={e => setField('managingDirector', e.target.value)} placeholder="Name, title" />
             </Field>
             <Field label="Engagement Lead *">
-              <input style={fieldStyle} value={form.lead} onChange={e => set('lead', e.target.value)} placeholder="Name, title" required />
+              <input style={fieldStyle} value={form.lead} onChange={e => setField('lead', e.target.value)} placeholder="Name, title" required />
             </Field>
           </div>
 
           <Field label="Start Date">
-            <input type="date" style={fieldStyle} value={form.startDate} onChange={e => set('startDate', e.target.value)} />
+            <input type="date" style={fieldStyle} value={form.startDate} onChange={e => setField('startDate', e.target.value)} />
           </Field>
 
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 24 }}>
+          {/* ── XLSX Import section ── */}
+          <div style={{ borderTop: '1px solid var(--border)', marginTop: 8, paddingTop: 16, marginBottom: 4 }}>
+            <div style={{ ...labelStyle, marginBottom: 8 }}>
+              Import milestones from XLSX
+              <span style={{ fontWeight: 400, marginLeft: 6, color: 'var(--text3)' }}>
+                — {mode === 'edit' ? 'appends to this project' : 'pre-fills new project'}
+              </span>
+            </div>
+
+            <input ref={fileInputRef} type="file" accept=".xlsx" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+
+            {importState.stage !== 'done' ? (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={e => { e.preventDefault(); setDragging(true); }}
+                onDragLeave={() => setDragging(false)}
+                onDrop={onDrop}
+                style={{
+                  border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--border)'}`,
+                  borderRadius: 6, padding: '14px 16px', textAlign: 'center',
+                  cursor: 'pointer', background: dragging ? 'var(--hover)' : 'transparent',
+                  fontSize: 12, color: 'var(--text3)', transition: 'all 0.15s',
+                }}
+              >
+                {importState.stage === 'parsing'
+                  ? 'Parsing…'
+                  : importState.stage === 'error'
+                    ? <span style={{ color: '#e53e3e' }}>{importState.message}</span>
+                    : 'Drop a SmartSheets .xlsx here, or click to browse'}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ flex: 1, padding: '8px 12px', background: 'var(--hover)', borderRadius: 6, fontSize: 12, color: 'var(--text)' }}>
+                  <strong>{importedCount}</strong> milestone{importedCount !== 1 ? 's' : ''}, <strong>{taskCount}</strong> task{taskCount !== 1 ? 's' : ''}
+                  {importState.warnings.length > 0 && (
+                    <span style={{ marginLeft: 8, color: '#b45309' }}>· {importState.warnings.length} warning{importState.warnings.length > 1 ? 's' : ''}</span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  style={{ fontSize: 12, padding: '4px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text3)', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  onClick={() => { setImportState({ stage: 'idle' }); if (fileInputRef.current) fileInputRef.current.value = ''; }}
+                >Clear</button>
+              </div>
+            )}
+          </div>
+
+          {/* ── Footer ── */}
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 24, alignItems: 'center' }}>
+            {mode === 'edit' && projects.length > 1 && (
+              confirmDelete ? (
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginRight: 'auto' }}>
+                  <span style={{ fontSize: 12, color: 'var(--text2)' }}>Delete this project?</span>
+                  <button
+                    type="button"
+                    style={{ fontSize: 13, padding: '5px 12px', border: 'none', borderRadius: 6, background: '#e53e3e', color: 'white', cursor: 'pointer', fontWeight: 600 }}
+                    onClick={() => { deleteProject(activeProject); onClose(); navigate('/dashboard'); }}
+                  >Yes, delete</button>
+                  <button
+                    type="button"
+                    style={{ fontSize: 12, padding: '5px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text2)', cursor: 'pointer' }}
+                    onClick={() => setConfirmDelete(false)}
+                  >Cancel</button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  style={{ fontSize: 13, padding: '5px 12px', border: '1px solid #e53e3e', borderRadius: 6, background: 'transparent', color: '#e53e3e', cursor: 'pointer', marginRight: 'auto' }}
+                  onClick={() => setConfirmDelete(true)}
+                >Delete project</button>
+              )
+            )}
             <button
               type="button"
               style={{ fontSize: 13, padding: '6px 16px', border: '1px solid var(--border)', borderRadius: 6, background: 'transparent', color: 'var(--text2)', cursor: 'pointer' }}

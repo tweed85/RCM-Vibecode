@@ -1,7 +1,15 @@
+export interface RosterPerson {
+  id: string;
+  name: string;
+  title?: string;
+  email?: string;
+}
+
 export interface AppState {
   activeProject: number;
   projects: Project[];
   supabaseIds: string[]; // parallel array — supabaseIds[i] is the Supabase UUID for projects[i]
+  amRoster: RosterPerson[]; // global A&M staff roster, shared across all projects
 }
 
 export interface Project {
@@ -19,7 +27,7 @@ export interface ProjectConfig {
   clientName: string;
   ehr: 'Epic' | 'Cerner' | 'Meditech' | 'Star' | 'Allscripts' | 'athenahealth' | 'Other';
   ehrCustom: string;
-  engagementType: 'Implementation' | 'Assessment';
+  engagementType: 'Implementation' | 'Assessment' | 'Internal';
   projectStatus: 'On Track' | 'At Risk' | 'Off Track' | 'Complete';
   startDate: string;
   managingDirector: string;
@@ -28,6 +36,7 @@ export interface ProjectConfig {
   denials: string[];
   roles: Role[];
   workstreams: Workstream[];
+  clientRoster: RosterPerson[];
 }
 
 export interface Role {
@@ -53,7 +62,7 @@ export interface Milestone {
   title: string;
   workstream: string;
   status: MilestoneStatus;
-  owner: string;
+  owners: string[];
   dueDate: string;
   tasks: Task[];
   impact: ImpactItem[];
@@ -68,7 +77,7 @@ export interface Task {
   startDate: string;
   endDate: string;
   note: string;
-  owner: string;
+  owners: string[];
   subtasks: Subtask[];
   predecessors: string[];
 }
@@ -77,7 +86,7 @@ export interface Subtask {
   id: string;
   text: string;
   done: boolean;
-  owner: string;
+  owners: string[];
   startDate: string;
   endDate: string;
 }

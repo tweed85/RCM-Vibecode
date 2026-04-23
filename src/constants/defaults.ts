@@ -3,6 +3,7 @@ import type { AppState } from '../store/types';
 export const DEFAULT_STATE: AppState = {
   activeProject: 0,
   supabaseIds: [],
+  amRoster: [],
   projects: [
     {
       config: {
@@ -31,18 +32,19 @@ export const DEFAULT_STATE: AppState = {
           { id: 'coding',  label: 'Coding',          color: 'amber',  amOwner: 'Priya Nair' },
           { id: 'ar',      label: 'AR Management',   color: 'coral',  amOwner: 'Marcus Webb' },
         ],
+        clientRoster: [],
       },
       milestones: [
         {
           id: '10000000-0000-0000-0000-000000000001', title: 'Prior authorization workflow consolidation',
-          workstream: 'auth', status: 'inprogress', owner: 'Auth Lead', dueDate: '2026-04-30',
+          workstream: 'auth', status: 'inprogress', owners: ['Auth Lead'], dueDate: '2026-04-30',
           tasks: [
-            { id: 'a1', text: 'Map current authorization responsibility by payer and specialty', done: true,  startDate: '2026-01-06', endDate: '2026-01-17', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
-            { id: 'a2', text: 'Identify specialties with highest prior auth denial rates – Wave 1 targets', done: true,  startDate: '2026-01-13', endDate: '2026-01-31', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
-            { id: 'a3', text: 'Build payer/specialty matrix and centralized auth tracking workqueue', done: true,  startDate: '2026-02-03', endDate: '2026-02-21', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
-            { id: 'a4', text: 'Finalize FTE model and staffing plan for centralized auth team', done: false, startDate: '2026-02-17', endDate: '2026-03-14', note: '', owner: 'Sarah Callahan', subtasks: [], predecessors: ['a3'] },
-            { id: 'a5', text: 'Develop authorization tracking dashboard and real-time workqueue views', done: false, startDate: '2026-03-09', endDate: '2026-03-28', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
-            { id: 'a6', text: 'Go-live readiness checklist, staff training, and sign-off', done: false, startDate: '2026-03-30', endDate: '2026-04-30', note: '', owner: 'Sarah Callahan', subtasks: [], predecessors: ['a4', 'a5'] },
+            { id: 'a1', text: 'Map current authorization responsibility by payer and specialty', done: true,  startDate: '2026-01-06', endDate: '2026-01-17', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: [] },
+            { id: 'a2', text: 'Identify specialties with highest prior auth denial rates – Wave 1 targets', done: true,  startDate: '2026-01-13', endDate: '2026-01-31', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: [] },
+            { id: 'a3', text: 'Build payer/specialty matrix and centralized auth tracking workqueue', done: true,  startDate: '2026-02-03', endDate: '2026-02-21', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: [] },
+            { id: 'a4', text: 'Finalize FTE model and staffing plan for centralized auth team', done: false, startDate: '2026-02-17', endDate: '2026-03-14', note: '', owners: ['Sarah Callahan'], subtasks: [], predecessors: ['a3'] },
+            { id: 'a5', text: 'Develop authorization tracking dashboard and real-time workqueue views', done: false, startDate: '2026-03-09', endDate: '2026-03-28', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: [] },
+            { id: 'a6', text: 'Go-live readiness checklist, staff training, and sign-off', done: false, startDate: '2026-03-30', endDate: '2026-04-30', note: '', owners: ['Sarah Callahan'], subtasks: [], predecessors: ['a4', 'a5'] },
           ],
           impact: [
             { type: 'Authorization Rate',    projected: '+12%',  realized: '' },
@@ -54,13 +56,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '10000000-0000-0000-0000-000000000002', title: 'AR aging acceleration – 90+ day bucket remediation',
-          workstream: 'ar', status: 'atrisk', owner: 'AR Manager', dueDate: '2026-04-15',
+          workstream: 'ar', status: 'atrisk', owners: ['AR Manager'], dueDate: '2026-04-15',
           tasks: [
-            { id: 'b1', text: 'Stratify AR aging by payer, service line, and denial reason', done: true,  startDate: '2026-01-06', endDate: '2026-01-23', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
-            { id: 'b2', text: 'Identify systemic billing edits contributing to 90+ day claims', done: true,  startDate: '2026-01-20', endDate: '2026-02-07', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: [] },
-            { id: 'b3', text: 'Escalate aged claims over 90 days to payer provider relations teams', done: false, startDate: '2026-02-10', endDate: '2026-03-07', note: 'UHC escalation path unclear – awaiting provider relations contact', owner: 'Marcus Webb', subtasks: [], predecessors: ['b2'] },
-            { id: 'b4', text: 'Implement billing edit corrections for top 5 systemic failure codes', done: false, startDate: '2026-02-24', endDate: '2026-03-21', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
-            { id: 'b5', text: 'Establish weekly AR velocity tracking cadence and leadership dashboard', done: false, startDate: '2026-03-16', endDate: '2026-04-15', note: '', owner: 'Marcus Webb', subtasks: [], predecessors: ['b3', 'b4'] },
+            { id: 'b1', text: 'Stratify AR aging by payer, service line, and denial reason', done: true,  startDate: '2026-01-06', endDate: '2026-01-23', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: [] },
+            { id: 'b2', text: 'Identify systemic billing edits contributing to 90+ day claims', done: true,  startDate: '2026-01-20', endDate: '2026-02-07', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: [] },
+            { id: 'b3', text: 'Escalate aged claims over 90 days to payer provider relations teams', done: false, startDate: '2026-02-10', endDate: '2026-03-07', note: 'UHC escalation path unclear – awaiting provider relations contact', owners: ['Marcus Webb'], subtasks: [], predecessors: ['b2'] },
+            { id: 'b4', text: 'Implement billing edit corrections for top 5 systemic failure codes', done: false, startDate: '2026-02-24', endDate: '2026-03-21', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: [] },
+            { id: 'b5', text: 'Establish weekly AR velocity tracking cadence and leadership dashboard', done: false, startDate: '2026-03-16', endDate: '2026-04-15', note: '', owners: ['Marcus Webb'], subtasks: [], predecessors: ['b3', 'b4'] },
           ],
           impact: [
             { type: 'AR Days Reduction', projected: '4.2 days', realized: '' },
@@ -72,13 +74,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '10000000-0000-0000-0000-000000000003', title: 'Front-end eligibility and clean claim rate improvement',
-          workstream: 'access', status: 'inprogress', owner: 'Patient Access Dir.', dueDate: '2026-05-15',
+          workstream: 'access', status: 'inprogress', owners: ['Patient Access Dir.'], dueDate: '2026-05-15',
           tasks: [
-            { id: 'c1', text: 'Baseline front-end denial rate by category (eligibility, COB, auth not obtained)', done: true,  startDate: '2026-01-06', endDate: '2026-01-23', note: '', owner: 'James Okafor', subtasks: [], predecessors: [] },
-            { id: 'c2', text: 'Enable real-time eligibility verification for all scheduled patients T-3 days', done: true,  startDate: '2026-01-27', endDate: '2026-03-07', note: '', owner: 'James Okafor', subtasks: [], predecessors: [] },
-            { id: 'c3', text: 'Implement COB verification workflow for dual-eligible population', done: false, startDate: '2026-02-23', endDate: '2026-03-28', note: '', owner: 'James Okafor', subtasks: [], predecessors: [] },
-            { id: 'c4', text: 'Train scheduling staff on eligibility exception handling and escalation', done: false, startDate: '2026-03-16', endDate: '2026-04-11', note: '', owner: 'Sarah Callahan', subtasks: [], predecessors: ['c3'] },
-            { id: 'c5', text: 'Measure front-end denial rate monthly and report to Access leadership', done: false, startDate: '2026-04-01', endDate: '2026-05-15', note: '', owner: 'James Okafor', subtasks: [], predecessors: [] },
+            { id: 'c1', text: 'Baseline front-end denial rate by category (eligibility, COB, auth not obtained)', done: true,  startDate: '2026-01-06', endDate: '2026-01-23', note: '', owners: ['James Okafor'], subtasks: [], predecessors: [] },
+            { id: 'c2', text: 'Enable real-time eligibility verification for all scheduled patients T-3 days', done: true,  startDate: '2026-01-27', endDate: '2026-03-07', note: '', owners: ['James Okafor'], subtasks: [], predecessors: [] },
+            { id: 'c3', text: 'Implement COB verification workflow for dual-eligible population', done: false, startDate: '2026-02-23', endDate: '2026-03-28', note: '', owners: ['James Okafor'], subtasks: [], predecessors: [] },
+            { id: 'c4', text: 'Train scheduling staff on eligibility exception handling and escalation', done: false, startDate: '2026-03-16', endDate: '2026-04-11', note: '', owners: ['Sarah Callahan'], subtasks: [], predecessors: ['c3'] },
+            { id: 'c5', text: 'Measure front-end denial rate monthly and report to Access leadership', done: false, startDate: '2026-04-01', endDate: '2026-05-15', note: '', owners: ['James Okafor'], subtasks: [], predecessors: [] },
           ],
           impact: [
             { type: 'Clean Claim Rate',      projected: '+94%',  realized: '' },
@@ -89,13 +91,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '10000000-0000-0000-0000-000000000004', title: 'Medical necessity denial reduction program',
-          workstream: 'billing', status: 'notstarted', owner: 'Billing Director', dueDate: '2026-06-01',
+          workstream: 'billing', status: 'notstarted', owners: ['Billing Director'], dueDate: '2026-06-01',
           tasks: [
-            { id: 'd1', text: 'Pull and validate medical necessity denial data from remittance files', done: false, startDate: '2026-03-03', endDate: '2026-03-21', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
-            { id: 'd2', text: 'Stratify denials by payer, DRG, and attending physician', done: false, startDate: '2026-03-17', endDate: '2026-04-04', note: '', owner: 'Priya Nair', subtasks: [], predecessors: ['d1'] },
-            { id: 'd3', text: 'Identify top 10 DRGs driving highest medical necessity denial volume', done: false, startDate: '2026-04-06', endDate: '2026-04-25', note: '', owner: 'Priya Nair', subtasks: [], predecessors: ['d2'] },
-            { id: 'd4', text: 'Develop CDI query feedback loop with HIM on targeted DRGs', done: false, startDate: '2026-04-21', endDate: '2026-05-15', note: '', owner: 'Sarah Callahan', subtasks: [], predecessors: [] },
-            { id: 'd5', text: 'Implement pre-bill medical necessity screening criteria in EHR', done: false, startDate: '2026-05-11', endDate: '2026-06-01', note: '', owner: 'Priya Nair', subtasks: [], predecessors: ['d4'] },
+            { id: 'd1', text: 'Pull and validate medical necessity denial data from remittance files', done: false, startDate: '2026-03-03', endDate: '2026-03-21', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: [] },
+            { id: 'd2', text: 'Stratify denials by payer, DRG, and attending physician', done: false, startDate: '2026-03-17', endDate: '2026-04-04', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: ['d1'] },
+            { id: 'd3', text: 'Identify top 10 DRGs driving highest medical necessity denial volume', done: false, startDate: '2026-04-06', endDate: '2026-04-25', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: ['d2'] },
+            { id: 'd4', text: 'Develop CDI query feedback loop with HIM on targeted DRGs', done: false, startDate: '2026-04-21', endDate: '2026-05-15', note: '', owners: ['Sarah Callahan'], subtasks: [], predecessors: [] },
+            { id: 'd5', text: 'Implement pre-bill medical necessity screening criteria in EHR', done: false, startDate: '2026-05-11', endDate: '2026-06-01', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: ['d4'] },
           ],
           impact: [
             { type: 'Denial Rate Reduction', projected: '6.5%',   realized: '' },
@@ -106,13 +108,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '10000000-0000-0000-0000-000000000005', title: 'Charge capture and missing charges audit',
-          workstream: 'coding', status: 'complete', owner: 'HIM / Coding', dueDate: '2026-03-15',
+          workstream: 'coding', status: 'complete', owners: ['HIM / Coding'], dueDate: '2026-03-15',
           tasks: [
-            { id: 'e1', text: 'Identify departments with highest DNFB and late charge rates', done: true, startDate: '2026-01-05', endDate: '2026-01-23', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
-            { id: 'e2', text: 'Build missing charge detection query against charges and encounter data', done: true, startDate: '2026-01-20', endDate: '2026-02-07', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
-            { id: 'e3', text: 'Cross-reference CPT utilization against benchmark comparators by specialty', done: true, startDate: '2026-02-03', endDate: '2026-02-21', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
-            { id: 'e4', text: 'Educate clinical departments on charge capture requirements', done: true, startDate: '2026-02-17', endDate: '2026-03-07', note: '', owner: 'Sarah Callahan', subtasks: [], predecessors: [] },
-            { id: 'e5', text: 'Implement charge router edits to catch common missed charge patterns', done: true, startDate: '2026-03-02', endDate: '2026-03-15', note: '', owner: 'Priya Nair', subtasks: [], predecessors: [] },
+            { id: 'e1', text: 'Identify departments with highest DNFB and late charge rates', done: true, startDate: '2026-01-05', endDate: '2026-01-23', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: [] },
+            { id: 'e2', text: 'Build missing charge detection query against charges and encounter data', done: true, startDate: '2026-01-20', endDate: '2026-02-07', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: [] },
+            { id: 'e3', text: 'Cross-reference CPT utilization against benchmark comparators by specialty', done: true, startDate: '2026-02-03', endDate: '2026-02-21', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: [] },
+            { id: 'e4', text: 'Educate clinical departments on charge capture requirements', done: true, startDate: '2026-02-17', endDate: '2026-03-07', note: '', owners: ['Sarah Callahan'], subtasks: [], predecessors: [] },
+            { id: 'e5', text: 'Implement charge router edits to catch common missed charge patterns', done: true, startDate: '2026-03-02', endDate: '2026-03-15', note: '', owners: ['Priya Nair'], subtasks: [], predecessors: [] },
           ],
           impact: [
             { type: 'Cash Recovery',     projected: '$870K', realized: '' },
@@ -164,16 +166,17 @@ export const DEFAULT_STATE: AppState = {
           { id: 'appeals',  label: 'Appeals',            color: 'purple', amOwner: 'Kevin Adler' },
           { id: 'payer',    label: 'Payer Relations',    color: 'teal',   amOwner: 'Rachel Torres' },
         ],
+        clientRoster: [],
       },
       milestones: [
         {
           id: '20000000-0000-0000-0000-000000000010', title: 'Denial root cause analysis and segmentation',
-          workstream: 'denials', status: 'complete', owner: 'Denial Manager', dueDate: '2026-01-31',
+          workstream: 'denials', status: 'complete', owners: ['Denial Manager'], dueDate: '2026-01-31',
           tasks: [
-            { id: 'p1', text: 'Pull 12-month denial data and stratify by CARC/RARC code', done: true, startDate: '2025-11-10', endDate: '2025-11-28', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 'p2', text: 'Identify top 10 denial drivers by dollar volume and frequency', done: true, startDate: '2025-11-24', endDate: '2025-12-12', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 'p3', text: 'Map denial root causes to upstream process owners', done: true, startDate: '2025-12-08', endDate: '2025-12-20', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 'p4', text: 'Present denial segmentation findings to leadership', done: true, startDate: '2026-01-05', endDate: '2026-01-31', note: '', owner: 'Rachel Torres', subtasks: [], predecessors: [] },
+            { id: 'p1', text: 'Pull 12-month denial data and stratify by CARC/RARC code', done: true, startDate: '2025-11-10', endDate: '2025-11-28', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 'p2', text: 'Identify top 10 denial drivers by dollar volume and frequency', done: true, startDate: '2025-11-24', endDate: '2025-12-12', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 'p3', text: 'Map denial root causes to upstream process owners', done: true, startDate: '2025-12-08', endDate: '2025-12-20', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 'p4', text: 'Present denial segmentation findings to leadership', done: true, startDate: '2026-01-05', endDate: '2026-01-31', note: '', owners: ['Rachel Torres'], subtasks: [], predecessors: [] },
           ],
           impact: [
             { type: 'Denial Rate Reduction', projected: 'baseline set', realized: '' },
@@ -185,12 +188,12 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '20000000-0000-0000-0000-000000000011', title: 'Auth Not Obtained denial prevention program',
-          workstream: 'denials', status: 'atrisk', owner: 'Auth Lead', dueDate: '2026-04-01',
+          workstream: 'denials', status: 'atrisk', owners: ['Auth Lead'], dueDate: '2026-04-01',
           tasks: [
-            { id: 'q1', text: 'Identify procedures requiring auth that currently have no auth workflow', done: true,  startDate: '2026-01-05', endDate: '2026-01-23', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 'q2', text: 'Build payer-specific auth requirement tables in Cerner scheduling', done: false, startDate: '2026-01-27', endDate: '2026-03-06', note: 'Cerner build backlog causing delay – IT ticket submitted 2/3', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 'q3', text: 'Implement real-time auth verification alert at point of scheduling', done: false, startDate: '2026-02-23', endDate: '2026-03-21', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: ['q2'] },
-            { id: 'q4', text: 'Train scheduling and access staff on new auth verification workflow', done: false, startDate: '2026-03-16', endDate: '2026-04-01', note: '', owner: 'Tina Guerrero', subtasks: [], predecessors: ['q3'] },
+            { id: 'q1', text: 'Identify procedures requiring auth that currently have no auth workflow', done: true,  startDate: '2026-01-05', endDate: '2026-01-23', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 'q2', text: 'Build payer-specific auth requirement tables in Cerner scheduling', done: false, startDate: '2026-01-27', endDate: '2026-03-06', note: 'Cerner build backlog causing delay – IT ticket submitted 2/3', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 'q3', text: 'Implement real-time auth verification alert at point of scheduling', done: false, startDate: '2026-02-23', endDate: '2026-03-21', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: ['q2'] },
+            { id: 'q4', text: 'Train scheduling and access staff on new auth verification workflow', done: false, startDate: '2026-03-16', endDate: '2026-04-01', note: '', owners: ['Tina Guerrero'], subtasks: [], predecessors: ['q3'] },
           ],
           impact: [
             { type: 'Authorization Rate',    projected: '+15%', realized: '' },
@@ -202,13 +205,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '20000000-0000-0000-0000-000000000012', title: 'Medical necessity and clinical documentation improvement',
-          workstream: 'coding', status: 'inprogress', owner: 'HIM / Coding', dueDate: '2026-05-01',
+          workstream: 'coding', status: 'inprogress', owners: ['HIM / Coding'], dueDate: '2026-05-01',
           tasks: [
-            { id: 'r1', text: 'Stratify medical necessity denials by DRG, payer, and attending', done: true,  startDate: '2026-01-05', endDate: '2026-01-23', note: '', owner: 'Tina Guerrero', subtasks: [], predecessors: [] },
-            { id: 'r2', text: 'Conduct CDI physician advisor review of top 5 denial DRGs', done: true,  startDate: '2026-01-27', endDate: '2026-02-14', note: '', owner: 'Tina Guerrero', subtasks: [], predecessors: [] },
-            { id: 'r3', text: 'Develop CDI query feedback loop with HIM coding team', done: false, startDate: '2026-02-10', endDate: '2026-03-07', note: '', owner: 'Tina Guerrero', subtasks: [], predecessors: [] },
-            { id: 'r4', text: 'Implement pre-bill medical necessity screening criteria in Cerner', done: false, startDate: '2026-03-02', endDate: '2026-04-04', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: ['r3'] },
-            { id: 'r5', text: 'Measure 60-day post-implementation denial rate change', done: false, startDate: '2026-04-06', endDate: '2026-05-01', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: ['r4'] },
+            { id: 'r1', text: 'Stratify medical necessity denials by DRG, payer, and attending', done: true,  startDate: '2026-01-05', endDate: '2026-01-23', note: '', owners: ['Tina Guerrero'], subtasks: [], predecessors: [] },
+            { id: 'r2', text: 'Conduct CDI physician advisor review of top 5 denial DRGs', done: true,  startDate: '2026-01-27', endDate: '2026-02-14', note: '', owners: ['Tina Guerrero'], subtasks: [], predecessors: [] },
+            { id: 'r3', text: 'Develop CDI query feedback loop with HIM coding team', done: false, startDate: '2026-02-10', endDate: '2026-03-07', note: '', owners: ['Tina Guerrero'], subtasks: [], predecessors: [] },
+            { id: 'r4', text: 'Implement pre-bill medical necessity screening criteria in Cerner', done: false, startDate: '2026-03-02', endDate: '2026-04-04', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: ['r3'] },
+            { id: 'r5', text: 'Measure 60-day post-implementation denial rate change', done: false, startDate: '2026-04-06', endDate: '2026-05-01', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: ['r4'] },
           ],
           impact: [
             { type: 'Denial Rate Reduction', projected: '28%', realized: '' },
@@ -219,13 +222,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '20000000-0000-0000-0000-000000000013', title: 'Appeals workflow and overturn rate optimization',
-          workstream: 'appeals', status: 'inprogress', owner: 'Billing Director', dueDate: '2026-05-15',
+          workstream: 'appeals', status: 'inprogress', owners: ['Billing Director'], dueDate: '2026-05-15',
           tasks: [
-            { id: 's1', text: 'Audit current appeals process and overturn rate by payer and denial category', done: true,  startDate: '2026-01-05', endDate: '2026-01-31', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 's2', text: 'Build denial appeal letter templates by denial category', done: true,  startDate: '2026-02-02', endDate: '2026-02-28', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 's3', text: 'Establish appeals tracking dashboard in Cerner with SLA alerts', done: false, startDate: '2026-02-23', endDate: '2026-03-28', note: '', owner: 'Tina Guerrero', subtasks: [], predecessors: [] },
-            { id: 's4', text: 'Train billing staff on new appeals templates and escalation triggers', done: false, startDate: '2026-03-23', endDate: '2026-04-18', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: ['s3'] },
-            { id: 's5', text: 'Measure 30-day overturn rate improvement versus baseline', done: false, startDate: '2026-04-20', endDate: '2026-05-15', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: ['s4'] },
+            { id: 's1', text: 'Audit current appeals process and overturn rate by payer and denial category', done: true,  startDate: '2026-01-05', endDate: '2026-01-31', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 's2', text: 'Build denial appeal letter templates by denial category', done: true,  startDate: '2026-02-02', endDate: '2026-02-28', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 's3', text: 'Establish appeals tracking dashboard in Cerner with SLA alerts', done: false, startDate: '2026-02-23', endDate: '2026-03-28', note: '', owners: ['Tina Guerrero'], subtasks: [], predecessors: [] },
+            { id: 's4', text: 'Train billing staff on new appeals templates and escalation triggers', done: false, startDate: '2026-03-23', endDate: '2026-04-18', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: ['s3'] },
+            { id: 's5', text: 'Measure 30-day overturn rate improvement versus baseline', done: false, startDate: '2026-04-20', endDate: '2026-05-15', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: ['s4'] },
           ],
           impact: [
             { type: 'Cash Recovery',     projected: '$1.9M', realized: '' },
@@ -236,12 +239,12 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '20000000-0000-0000-0000-000000000014', title: 'Payer contract and reimbursement rate review',
-          workstream: 'payer', status: 'notstarted', owner: 'Billing Director', dueDate: '2026-06-30',
+          workstream: 'payer', status: 'notstarted', owners: ['Billing Director'], dueDate: '2026-06-30',
           tasks: [
-            { id: 't1', text: 'Compile current payer contract terms and fee schedule matrix', done: false, startDate: '2026-04-06', endDate: '2026-04-24', note: '', owner: 'Rachel Torres', subtasks: [], predecessors: [] },
-            { id: 't2', text: 'Benchmark reimbursement rates against regional comparators', done: false, startDate: '2026-04-21', endDate: '2026-05-09', note: '', owner: 'Rachel Torres', subtasks: [], predecessors: ['t1'] },
-            { id: 't3', text: 'Identify underpayment patterns and short-pay payers', done: false, startDate: '2026-05-05', endDate: '2026-05-23', note: '', owner: 'Kevin Adler', subtasks: [], predecessors: [] },
-            { id: 't4', text: 'Develop payer negotiation strategy and talking points for renegotiation', done: false, startDate: '2026-05-19', endDate: '2026-06-30', note: '', owner: 'Rachel Torres', subtasks: [], predecessors: ['t2', 't3'] },
+            { id: 't1', text: 'Compile current payer contract terms and fee schedule matrix', done: false, startDate: '2026-04-06', endDate: '2026-04-24', note: '', owners: ['Rachel Torres'], subtasks: [], predecessors: [] },
+            { id: 't2', text: 'Benchmark reimbursement rates against regional comparators', done: false, startDate: '2026-04-21', endDate: '2026-05-09', note: '', owners: ['Rachel Torres'], subtasks: [], predecessors: ['t1'] },
+            { id: 't3', text: 'Identify underpayment patterns and short-pay payers', done: false, startDate: '2026-05-05', endDate: '2026-05-23', note: '', owners: ['Kevin Adler'], subtasks: [], predecessors: [] },
+            { id: 't4', text: 'Develop payer negotiation strategy and talking points for renegotiation', done: false, startDate: '2026-05-19', endDate: '2026-06-30', note: '', owners: ['Rachel Torres'], subtasks: [], predecessors: ['t2', 't3'] },
           ],
           impact: [
             { type: 'Cash Recovery',  projected: 'TBD', realized: '' },
@@ -289,17 +292,18 @@ export const DEFAULT_STATE: AppState = {
           { id: 'dnfb',      label: 'DNFB / Late Charges',  color: 'coral',  amOwner: 'Brian Holloway' },
           { id: 'benchmark', label: 'Benchmarking',         color: 'purple', amOwner: 'Lisa Park' },
         ],
+        clientRoster: [],
       },
       milestones: [
         {
           id: '30000000-0000-0000-0000-000000000020', title: 'Missing charge identification and revenue quantification',
-          workstream: 'capture', status: 'complete', owner: 'Charge Capture Lead', dueDate: '2026-03-14',
+          workstream: 'capture', status: 'complete', owners: ['Charge Capture Lead'], dueDate: '2026-03-14',
           tasks: [
-            { id: 'v1', text: 'Pull charge and encounter data for 12-month lookback period', done: true, startDate: '2026-02-02', endDate: '2026-02-13', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
-            { id: 'v2', text: 'Identify departments with highest DNFB and late charge rates', done: true, startDate: '2026-02-09', endDate: '2026-02-20', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
-            { id: 'v3', text: 'Build missing charge detection logic against charges and encounter data', done: true, startDate: '2026-02-17', endDate: '2026-02-28', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
-            { id: 'v4', text: 'Cross-reference CPT utilization against peer benchmarks by specialty', done: true, startDate: '2026-02-24', endDate: '2026-03-07', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'v5', text: 'Quantify total missing charge opportunity and prioritize by department', done: true, startDate: '2026-03-03', endDate: '2026-03-14', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
+            { id: 'v1', text: 'Pull charge and encounter data for 12-month lookback period', done: true, startDate: '2026-02-02', endDate: '2026-02-13', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
+            { id: 'v2', text: 'Identify departments with highest DNFB and late charge rates', done: true, startDate: '2026-02-09', endDate: '2026-02-20', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
+            { id: 'v3', text: 'Build missing charge detection logic against charges and encounter data', done: true, startDate: '2026-02-17', endDate: '2026-02-28', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
+            { id: 'v4', text: 'Cross-reference CPT utilization against peer benchmarks by specialty', done: true, startDate: '2026-02-24', endDate: '2026-03-07', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'v5', text: 'Quantify total missing charge opportunity and prioritize by department', done: true, startDate: '2026-03-03', endDate: '2026-03-14', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
           ],
           impact: [
             { type: 'Cash Recovery',    projected: '$2.3M', realized: '' },
@@ -311,13 +315,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '30000000-0000-0000-0000-000000000021', title: 'Coding accuracy and DRG optimization review',
-          workstream: 'coding', status: 'inprogress', owner: 'Coding Manager', dueDate: '2026-04-18',
+          workstream: 'coding', status: 'inprogress', owners: ['Coding Manager'], dueDate: '2026-04-18',
           tasks: [
-            { id: 'w1', text: 'Sample and review inpatient coding accuracy across high-volume DRGs', done: true,  startDate: '2026-02-16', endDate: '2026-03-06', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'w2', text: 'Identify patterns of undercoding or overcoding by service line', done: true,  startDate: '2026-03-02', endDate: '2026-03-20', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'w3', text: 'Conduct physician advisor clinical validation on top 20 denial DRGs', done: false, startDate: '2026-03-16', endDate: '2026-04-03', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'w4', text: 'Quantify financial impact of coding accuracy gaps and DRG optimization', done: false, startDate: '2026-03-30', endDate: '2026-04-11', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: ['w3'] },
-            { id: 'w5', text: 'Present coding accuracy findings and recommendations to HIM and CFO', done: false, startDate: '2026-04-13', endDate: '2026-04-18', note: '', owner: 'Lisa Park', subtasks: [], predecessors: ['w4'] },
+            { id: 'w1', text: 'Sample and review inpatient coding accuracy across high-volume DRGs', done: true,  startDate: '2026-02-16', endDate: '2026-03-06', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'w2', text: 'Identify patterns of undercoding or overcoding by service line', done: true,  startDate: '2026-03-02', endDate: '2026-03-20', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'w3', text: 'Conduct physician advisor clinical validation on top 20 denial DRGs', done: false, startDate: '2026-03-16', endDate: '2026-04-03', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'w4', text: 'Quantify financial impact of coding accuracy gaps and DRG optimization', done: false, startDate: '2026-03-30', endDate: '2026-04-11', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: ['w3'] },
+            { id: 'w5', text: 'Present coding accuracy findings and recommendations to HIM and CFO', done: false, startDate: '2026-04-13', endDate: '2026-04-18', note: '', owners: ['Lisa Park'], subtasks: [], predecessors: ['w4'] },
           ],
           impact: [
             { type: 'Cash Recovery',         projected: '$1.4M', realized: '' },
@@ -329,13 +333,13 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '30000000-0000-0000-0000-000000000022', title: 'CDI program effectiveness assessment',
-          workstream: 'cdi', status: 'inprogress', owner: 'CDI Manager', dueDate: '2026-04-30',
+          workstream: 'cdi', status: 'inprogress', owners: ['CDI Manager'], dueDate: '2026-04-30',
           tasks: [
-            { id: 'x1', text: 'Assess current CDI query rate, response rate, and agreement rate', done: true,  startDate: '2026-02-16', endDate: '2026-02-27', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'x2', text: 'Benchmark CDI metrics against AHIMA and peer organization standards', done: true,  startDate: '2026-02-23', endDate: '2026-03-07', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'x3', text: 'Identify top DRG pairs where CDI intervention improves severity capture', done: false, startDate: '2026-03-10', endDate: '2026-03-28', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: [] },
-            { id: 'x4', text: 'Develop CDI education program targeting high-opportunity specialties', done: false, startDate: '2026-03-24', endDate: '2026-04-18', note: '', owner: 'Natalie Brooks', subtasks: [], predecessors: ['x3'] },
-            { id: 'x5', text: 'Build CDI performance scorecard for ongoing tracking', done: false, startDate: '2026-04-13', endDate: '2026-04-30', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
+            { id: 'x1', text: 'Assess current CDI query rate, response rate, and agreement rate', done: true,  startDate: '2026-02-16', endDate: '2026-02-27', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'x2', text: 'Benchmark CDI metrics against AHIMA and peer organization standards', done: true,  startDate: '2026-02-23', endDate: '2026-03-07', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'x3', text: 'Identify top DRG pairs where CDI intervention improves severity capture', done: false, startDate: '2026-03-10', endDate: '2026-03-28', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: [] },
+            { id: 'x4', text: 'Develop CDI education program targeting high-opportunity specialties', done: false, startDate: '2026-03-24', endDate: '2026-04-18', note: '', owners: ['Natalie Brooks'], subtasks: [], predecessors: ['x3'] },
+            { id: 'x5', text: 'Build CDI performance scorecard for ongoing tracking', done: false, startDate: '2026-04-13', endDate: '2026-04-30', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
           ],
           impact: [
             { type: 'Cash Recovery',         projected: '$900K', realized: '' },
@@ -346,12 +350,12 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '30000000-0000-0000-0000-000000000023', title: 'DNFB reduction and charge submission timeliness',
-          workstream: 'dnfb', status: 'notstarted', owner: 'HIM Director', dueDate: '2026-05-30',
+          workstream: 'dnfb', status: 'notstarted', owners: ['HIM Director'], dueDate: '2026-05-30',
           tasks: [
-            { id: 'y1', text: 'Establish DNFB baseline by department and benchmark against peers', done: false, startDate: '2026-04-06', endDate: '2026-04-18', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
-            { id: 'y2', text: 'Identify top contributing departments to late charge volume', done: false, startDate: '2026-04-14', endDate: '2026-04-25', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: ['y1'] },
-            { id: 'y3', text: 'Develop charge submission timeliness targets by department and role', done: false, startDate: '2026-04-21', endDate: '2026-05-09', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: [] },
-            { id: 'y4', text: 'Build DNFB accountability structure and reporting cadence for leadership', done: false, startDate: '2026-05-04', endDate: '2026-05-30', note: '', owner: 'Lisa Park', subtasks: [], predecessors: ['y2', 'y3'] },
+            { id: 'y1', text: 'Establish DNFB baseline by department and benchmark against peers', done: false, startDate: '2026-04-06', endDate: '2026-04-18', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
+            { id: 'y2', text: 'Identify top contributing departments to late charge volume', done: false, startDate: '2026-04-14', endDate: '2026-04-25', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: ['y1'] },
+            { id: 'y3', text: 'Develop charge submission timeliness targets by department and role', done: false, startDate: '2026-04-21', endDate: '2026-05-09', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: [] },
+            { id: 'y4', text: 'Build DNFB accountability structure and reporting cadence for leadership', done: false, startDate: '2026-05-04', endDate: '2026-05-30', note: '', owners: ['Lisa Park'], subtasks: [], predecessors: ['y2', 'y3'] },
           ],
           impact: [
             { type: 'AR Days Reduction', projected: '3.2 days', realized: '' },
@@ -362,12 +366,12 @@ export const DEFAULT_STATE: AppState = {
         },
         {
           id: '30000000-0000-0000-0000-000000000024', title: 'Executive benchmarking and opportunity summary',
-          workstream: 'benchmark', status: 'notstarted', owner: 'CFO / Finance', dueDate: '2026-06-13',
+          workstream: 'benchmark', status: 'notstarted', owners: ['CFO / Finance'], dueDate: '2026-06-13',
           tasks: [
-            { id: 'z1', text: 'Compile all workstream findings into integrated opportunity model', done: false, startDate: '2026-05-18', endDate: '2026-05-29', note: '', owner: 'Lisa Park', subtasks: [], predecessors: [] },
-            { id: 'z2', text: 'Benchmark overall revenue cycle performance against national medians', done: false, startDate: '2026-05-25', endDate: '2026-06-05', note: '', owner: 'Lisa Park', subtasks: [], predecessors: ['z1'] },
-            { id: 'z3', text: 'Develop prioritized roadmap with ROI, effort, and sequencing', done: false, startDate: '2026-06-01', endDate: '2026-06-10', note: '', owner: 'Brian Holloway', subtasks: [], predecessors: ['z2'] },
-            { id: 'z4', text: 'Deliver final assessment presentation to CFO and senior leadership', done: false, startDate: '2026-06-09', endDate: '2026-06-13', note: '', owner: 'Lisa Park', subtasks: [], predecessors: ['z3'] },
+            { id: 'z1', text: 'Compile all workstream findings into integrated opportunity model', done: false, startDate: '2026-05-18', endDate: '2026-05-29', note: '', owners: ['Lisa Park'], subtasks: [], predecessors: [] },
+            { id: 'z2', text: 'Benchmark overall revenue cycle performance against national medians', done: false, startDate: '2026-05-25', endDate: '2026-06-05', note: '', owners: ['Lisa Park'], subtasks: [], predecessors: ['z1'] },
+            { id: 'z3', text: 'Develop prioritized roadmap with ROI, effort, and sequencing', done: false, startDate: '2026-06-01', endDate: '2026-06-10', note: '', owners: ['Brian Holloway'], subtasks: [], predecessors: ['z2'] },
+            { id: 'z4', text: 'Deliver final assessment presentation to CFO and senior leadership', done: false, startDate: '2026-06-09', endDate: '2026-06-13', note: '', owners: ['Lisa Park'], subtasks: [], predecessors: ['z3'] },
           ],
           impact: [
             { type: 'Cash Recovery',     projected: '$5.4M total', realized: '' },

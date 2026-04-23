@@ -15,7 +15,7 @@ function rowToProject(row: Record<string, unknown>): Project {
       title:       m.title as string,
       workstream:  m.workstream as string,
       status:      m.status as Milestone['status'],
-      owner:       m.owner as string,
+      owners:      (m.owners as string[]) ?? [],
       dueDate:     m.due_date as string,
       note:        m.note as string,
       noteExport:  m.note_export as boolean,
@@ -28,7 +28,7 @@ function rowToProject(row: Record<string, unknown>): Project {
           startDate:    t.start_date as string,
           endDate:      t.end_date as string,
           note:         t.note as string,
-          owner:        t.owner as string,
+          owners:       (t.owners as string[]) ?? [],
           predecessors: (t.predecessors as string[]) ?? [],
           subtasks: ((t.subtasks as Record<string, unknown>[]) ?? [])
             .sort((a, b) => (a.sort_order as number) - (b.sort_order as number))
@@ -36,7 +36,7 @@ function rowToProject(row: Record<string, unknown>): Project {
               id:        st.id as string,
               text:      st.text as string,
               done:      st.done as boolean,
-              owner:     st.owner as string,
+              owners:    (st.owners as string[]) ?? [],
               startDate: st.start_date as string,
               endDate:   st.end_date as string,
             } as Subtask)),
@@ -62,6 +62,7 @@ function rowToProject(row: Record<string, unknown>): Project {
       lead:             row.lead as string,
       payers:           (row.payers as string[]) ?? [],
       denials:          (row.denials as string[]) ?? [],
+      clientRoster:     (row.client_roster as Record<string, unknown>[]) ?? [],
       roles: ((row.roles as Record<string, unknown>[]) ?? [])
         .sort((a, b) => (a.sort_order as number) - (b.sort_order as number))
         .map(r => ({ key: r.role_key as string, clientRole: r.client_role as string })),
@@ -128,6 +129,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
         lead: cfg.lead,
         payers: cfg.payers,
         denials: cfg.denials,
+        client_roster: cfg.clientRoster ?? [],
         active_filter: proj.activeFilter,
         active_raid_tab: proj.activeRaidTab,
         tasks_filter_ws: proj.tasksFilterWs,
@@ -153,6 +155,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
         lead: cfg.lead,
         payers: cfg.payers,
         denials: cfg.denials,
+        client_roster: cfg.clientRoster ?? [],
         active_filter: proj.activeFilter,
         active_raid_tab: proj.activeRaidTab,
         tasks_filter_ws: proj.tasksFilterWs,
@@ -212,7 +215,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
         workstream:  m.workstream,
         title:       m.title,
         status:      m.status,
-        owner:       m.owner,
+        owners:      m.owners ?? [],
         due_date:    m.dueDate,
         note:        m.note,
         note_export: m.noteExport,
@@ -231,7 +234,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
         start_date:   t.startDate,
         end_date:     t.endDate,
         note:         t.note,
-        owner:        t.owner,
+        owners:       t.owners ?? [],
         predecessors: t.predecessors ?? [],
         sort_order:   ti,
       }))
@@ -249,7 +252,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
           task_id:    t.id,
           text:       st.text,
           done:       st.done,
-          owner:      st.owner,
+          owners:     st.owners ?? [],
           start_date: st.startDate,
           end_date:   st.endDate,
           sort_order: si,
@@ -322,6 +325,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
 export function useSupabaseSync(user: User | null) {
   const store       = useProjectStore();
   const saveTimers  = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
+  const savingSet   = useRef<Set<number>>(new Set());
   const isHydrating = useRef(false);
   const initialized = useRef(false);
 
@@ -379,8 +383,16 @@ export function useSupabaseSync(user: User | null) {
         if (proj === prev.projects[idx]) return;
 
         clearTimeout(saveTimers.current[idx]);
-        saveTimers.current[idx] = setTimeout(() => {
-          saveProject(proj, state.supabaseIds[idx], idx);
+        saveTimers.current[idx] = setTimeout(async () => {
+          // Skip if a save for this index is already in flight — prevents
+          // duplicate inserts when supabaseIds[idx] hasn't been set yet
+          if (savingSet.current.has(idx)) return;
+          savingSet.current.add(idx);
+          try {
+            await saveProject(proj, state.supabaseIds[idx], idx);
+          } finally {
+            savingSet.current.delete(idx);
+          }
         }, DEBOUNCE_MS);
       });
     });

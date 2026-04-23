@@ -4,6 +4,7 @@ import { useProjectStore } from '../../store/useProjectStore';
 import { getWbs } from '../../utils/wbs';
 import { WbsBadge } from '../shared/WbsBadge';
 import { WorkstreamBadge } from '../shared/WorkstreamBadge';
+import { OwnerSelect } from '../shared/OwnerSelect';
 import { SubtaskRow } from './SubtaskRow';
 import { triggerSaveIndicator } from '../layout/Topbar';
 import styles from './TaskDetail.module.css';
@@ -18,7 +19,7 @@ const fieldStyle: React.CSSProperties = {
 export function TaskDetail() {
   const { tid } = useParams<{ tid: string }>();
   const navigate = useNavigate();
-  const { projects, activeProject, updateTask, addSubtask } = useProjectStore();
+  const { projects, activeProject, updateTask, addSubtask, moveTaskToMilestone } = useProjectStore();
   const proj = projects[activeProject];
   const cfg = proj.config;
 
@@ -65,7 +66,7 @@ export function TaskDetail() {
   function handleAddSub(e: React.FormEvent) {
     e.preventDefault();
     if (!addSubText.trim()) return;
-    addSubtask(milestoneId, t.id, { text: addSubText.trim(), done: false, owner: '', startDate: '', endDate: '' });
+    addSubtask(milestoneId, t.id, { text: addSubText.trim(), done: false, owners: [], startDate: '', endDate: '' });
     setAddSubText('');
   }
 
@@ -94,9 +95,24 @@ export function TaskDetail() {
       </div>
 
       <h1 className={styles.title}>{t.text}</h1>
-      <p style={{ fontSize: 13, color: 'var(--text3)', marginBottom: '1.5rem' }}>
-        Milestone: <strong style={{ color: 'var(--text2)' }}>{milestone.title}</strong>
-      </p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.5rem' }}>
+        <span style={{ fontSize: 13, color: 'var(--text3)' }}>Milestone:</span>
+        <select
+          style={{ fontSize: 13, padding: '3px 8px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', cursor: 'pointer' }}
+          value={milestoneId}
+          onChange={e => {
+            const toId = e.target.value;
+            if (toId !== milestoneId) {
+              moveTaskToMilestone(milestoneId, t.id, toId);
+              navigate('/tasks');
+            }
+          }}
+        >
+          {proj.milestones.map(m => (
+            <option key={m.id} value={m.id}>{m.title}</option>
+          ))}
+        </select>
+      </div>
 
       <div className={styles.grid}>
         <div className={styles.card}>
@@ -121,7 +137,7 @@ export function TaskDetail() {
           </div>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Owner</label>
-            <input style={fieldStyle} defaultValue={t.owner} placeholder="Assignee name" onBlur={e => update({ owner: e.target.value })} />
+            <OwnerSelect values={t.owners ?? []} onChange={v => update({ owners: v })} />
           </div>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Notes</label>

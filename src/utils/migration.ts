@@ -13,9 +13,24 @@ export function migrateState(state: AppState): AppState {
     if (!project.activeRaidTab)     project.activeRaidTab     = 'all';
 
     for (const m of project.milestones ?? []) {
+      // owner → owners migration
+      if ('owner' in m && !Array.isArray((m as unknown as Record<string, unknown>).owners)) {
+        (m as unknown as Record<string, unknown>).owners = [(m as unknown as Record<string, unknown>).owner].filter(Boolean);
+        delete (m as unknown as Record<string, unknown>).owner;
+      }
       for (const t of m.tasks ?? []) {
         t.subtasks    ??= [];
         t.predecessors ??= [];
+        if ('owner' in t && !Array.isArray((t as unknown as Record<string, unknown>).owners)) {
+          (t as unknown as Record<string, unknown>).owners = [(t as unknown as Record<string, unknown>).owner].filter(Boolean);
+          delete (t as unknown as Record<string, unknown>).owner;
+        }
+        for (const st of t.subtasks ?? []) {
+          if ('owner' in st && !Array.isArray((st as unknown as Record<string, unknown>).owners)) {
+            (st as unknown as Record<string, unknown>).owners = [(st as unknown as Record<string, unknown>).owner].filter(Boolean);
+            delete (st as unknown as Record<string, unknown>).owner;
+          }
+        }
       }
       for (const imp of m.impact ?? []) {
         if ('value' in imp && !('projected' in imp)) {

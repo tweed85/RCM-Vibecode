@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type {
   AppState, Project, ProjectConfig, Milestone, Task, Subtask,
-  RaidItem, DecisionItem,
+  RaidItem, DecisionItem, RosterPerson,
 } from './types';
 import { DEFAULT_STATE } from '../constants/defaults';
 import { LS_KEY, LS_VERSION } from '../constants/enums';
@@ -35,6 +35,7 @@ interface ProjectStore extends AppState {
   updateTask: (milestoneId: string, taskId: string, updates: Partial<Task>) => void;
   deleteTask: (milestoneId: string, taskId: string) => void;
   moveTask: (milestoneId: string, taskId: string, direction: -1 | 1) => void;
+  moveTaskToMilestone: (fromMilestoneId: string, taskId: string, toMilestoneId: string) => void;
   addPredecessor: (milestoneId: string, taskId: string, predId: string) => void;
   removePredecessor: (milestoneId: string, taskId: string, predId: string) => void;
 
@@ -57,6 +58,12 @@ interface ProjectStore extends AppState {
   // Helpers
   currentProject: () => Project;
   resetToDefaults: () => void;
+  appendMilestonesToProject: (projectIdx: number, milestones: Milestone[]) => void;
+
+  // Roster
+  setAmRoster: (people: RosterPerson[]) => void;
+  addAmPerson: (person: RosterPerson) => void;
+  removeAmPerson: (id: string) => void;
 
   // Supabase sync
   setSupabaseId: (idx: number, id: string) => void;
@@ -240,6 +247,28 @@ export const useProjectStore = create<ProjectStore>()(
           return { projects };
         }),
 
+      moveTaskToMilestone: (fromMilestoneId, taskId, toMilestoneId) =>
+        set(s => {
+          const projects = [...s.projects];
+          const proj = { ...projects[s.activeProject] };
+          let task: Task | undefined;
+          proj.milestones = proj.milestones.map(m => {
+            if (m.id === fromMilestoneId) {
+              task = m.tasks.find(t => t.id === taskId);
+              return { ...m, tasks: m.tasks.filter(t => t.id !== taskId) };
+            }
+            return m;
+          });
+          if (task) {
+            proj.milestones = proj.milestones.map(m => {
+              if (m.id === toMilestoneId) return { ...m, tasks: [...m.tasks, task!] };
+              return m;
+            });
+          }
+          projects[s.activeProject] = proj;
+          return { projects };
+        }),
+
       addPredecessor: (milestoneId, taskId, predId) =>
         set(s => {
           const projects = [...s.projects];
@@ -405,6 +434,20 @@ export const useProjectStore = create<ProjectStore>()(
           const proj = { ...projects[s.activeProject] };
           proj.decisions = (proj.decisions ?? []).filter(d => d.id !== id);
           projects[s.activeProject] = proj;
+          return { projects };
+        }),
+
+      setAmRoster: (people) => set({ amRoster: people }),
+      addAmPerson: (person) => set(s => ({ amRoster: [...s.amRoster, person] })),
+      removeAmPerson: (id) => set(s => ({ amRoster: s.amRoster.filter(p => p.id !== id) })),
+
+      appendMilestonesToProject: (projectIdx, milestones) =>
+        set(s => {
+          const projects = [...s.projects];
+          projects[projectIdx] = {
+            ...projects[projectIdx],
+            milestones: [...projects[projectIdx].milestones, ...milestones],
+          };
           return { projects };
         }),
 
