@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { useProjectStore } from '../store/useProjectStore';
-import type { Project, Milestone, Task, Subtask, RaidItem, DecisionItem } from '../store/types';
+import type { Project, Milestone, Task, Subtask, RaidItem, DecisionItem, ImpactType, RosterPerson } from '../store/types';
 
 const DEBOUNCE_MS = 800;
 
@@ -44,7 +44,7 @@ function rowToProject(row: Record<string, unknown>): Project {
       impact: ((m.impact_items as Record<string, unknown>[]) ?? [])
         .sort((a, b) => (a.sort_order as number) - (b.sort_order as number))
         .map(i => ({
-          type:      i.type as string,
+          type:      i.type as ImpactType,
           projected: i.projected as string,
           realized:  i.realized as string,
         })),
@@ -62,7 +62,7 @@ function rowToProject(row: Record<string, unknown>): Project {
       lead:             row.lead as string,
       payers:           (row.payers as string[]) ?? [],
       denials:          (row.denials as string[]) ?? [],
-      clientRoster:     (row.client_roster as Record<string, unknown>[]) ?? [],
+      clientRoster:     (row.client_roster as RosterPerson[]) ?? [],
       roles: ((row.roles as Record<string, unknown>[]) ?? [])
         .sort((a, b) => (a.sort_order as number) - (b.sort_order as number))
         .map(r => ({ key: r.role_key as string, clientRole: r.client_role as string })),
@@ -176,7 +176,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
   ]);
 
   // 3. Insert workstreams and roles
-  const inserts: Promise<unknown>[] = [];
+  const inserts: PromiseLike<unknown>[] = [];
 
   if (cfg.workstreams.length > 0) {
     inserts.push(supabase.from('workstreams').insert(
@@ -281,7 +281,7 @@ async function saveProject(proj: Project, sbId: string | undefined, idx: number)
   }
 
   // 5. Insert RAID items and decisions
-  const tail: Promise<unknown>[] = [];
+  const tail: PromiseLike<unknown>[] = [];
 
   if (proj.raid.length > 0) {
     tail.push(supabase.from('raid_items').insert(
