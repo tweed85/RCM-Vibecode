@@ -33,10 +33,11 @@ export function migrateState(state: AppState): AppState {
         }
       }
       for (const imp of m.impact ?? []) {
-        if ('value' in imp && !('projected' in imp)) {
-          (imp as unknown as Record<string, string>)['projected'] = (imp as unknown as Record<string, string>)['value'];
-          imp.realized = imp.realized ?? '';
-          delete (imp as unknown as Record<string, string>)['value'];
+        const impRec = imp as unknown as Record<string, string>;
+        if ('value' in impRec && !('projected' in impRec)) {
+          impRec['projected'] = impRec['value'];
+          impRec['realized'] = impRec['realized'] ?? '';
+          delete impRec['value'];
         }
       }
     }

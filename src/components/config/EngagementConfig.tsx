@@ -308,7 +308,7 @@ export function EngagementConfig() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div className={styles.fieldGroup}>
                 <label className={styles.label}>Project Status</label>
-                <select style={fieldStyle} value={projectStatus} onChange={e => setProjectStatus(e.target.value)}>
+                <select style={fieldStyle} value={projectStatus} onChange={e => setProjectStatus(e.target.value as typeof projectStatus)}>
                   {PROJECT_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
