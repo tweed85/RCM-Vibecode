@@ -44,8 +44,8 @@
 .tab:hover { color: var(--text); }
 
 .tabActive {
-  color: #002B49 !important;
-  border-bottom-color: #002B49 !important;
+  color: var(--blue-dark) !important;
+  border-bottom-color: var(--blue-dark) !important;
   font-weight: 600;
 }
 

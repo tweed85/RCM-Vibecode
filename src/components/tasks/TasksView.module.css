@@ -41,8 +41,8 @@
 .chip:hover { background: var(--surface2); }
 
 .chipActive {
-  background: #002B49 !important;
-  border-color: #002B49 !important;
+  background: var(--blue-dark) !important;
+  border-color: var(--blue-dark) !important;
   color: white !important;
 }
 

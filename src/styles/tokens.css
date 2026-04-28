@@ -29,6 +29,8 @@
   --gold-bg: #fff3d6;
   --radius: 10px;
   --radius-sm: 6px;
+  --hover: #edf1f5;
+  --accent: #0085CA;
 }
 
 :root[data-theme="dark"] {
@@ -60,6 +62,8 @@
   --coral-bg: #2e0812;
   --gold: #F9C20A;
   --gold-bg: #2a1e00;
+  --hover: #162840;
+  --accent: #0085CA;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
