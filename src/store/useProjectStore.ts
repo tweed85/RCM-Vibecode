@@ -473,15 +473,15 @@ export const useProjectStore = create<ProjectStore>()(
       version: 1,
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // Version check against schema version tag stored separately
-          const savedVersion = localStorage.getItem(LS_KEY + '_schema');
-          if (savedVersion && savedVersion !== LS_VERSION) {
-            // Schema changed — blow away saved state
-            Object.assign(state, DEFAULT_STATE);
-          } else {
-            localStorage.setItem(LS_KEY + '_schema', LS_VERSION);
-            migrateState(state);
-          }
+          // Version check against schema version tag stored separately.
+          // Always run additive migration and stamp the current schema version.
+          // Do NOT wipe state on a version mismatch — the user's local data is
+          // the only durable copy before Supabase syncs, and a forced reset here
+          // would permanently destroy data for offline or slow-network users.
+          // If the schema is genuinely incompatible, individual migrate handlers
+          // should be added to migrateState() instead.
+          localStorage.setItem(LS_KEY + '_schema', LS_VERSION);
+          migrateState(state);
         }
       },
     }

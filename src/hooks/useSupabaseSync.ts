@@ -356,12 +356,14 @@ export function useSupabaseSync(user: User | null) {
         const ids      = (data as Record<string, unknown>[]).map(r => r.id as string);
         store.setProjects(projects, ids);
       } else {
-        // First login — migrate local projects to Supabase
-        isHydrating.current = false;
+        // First login — migrate local projects to Supabase.
+        // Keep isHydrating = true for the entire migration loop so the save
+        // subscriber cannot race-write stale data when setSupabaseId fires.
         const localProjects = useProjectStore.getState().projects;
         for (let i = 0; i < localProjects.length; i++) {
           await saveProject(localProjects[i], undefined, i);
         }
+        isHydrating.current = false;
         return;
       }
 
@@ -395,14 +397,31 @@ export function useSupabaseSync(user: User | null) {
       state.projects.forEach((proj, idx) => {
         if (proj === prev.projects[idx]) return;
 
+        // Capture the project's stable identity so we can detect if it was
+        // deleted or index-shifted before the debounce timer fires.
+        const capturedProjectId = proj.config.clientName + '_' + idx;
+        const capturedSupabaseId = state.supabaseIds[idx];
+
         clearTimeout(saveTimers.current[idx]);
         saveTimers.current[idx] = setTimeout(async () => {
+          // Re-read live state — the captured closure is stale by DEBOUNCE_MS.
+          const live = useProjectStore.getState();
+
+          // Bail if the project at this index was deleted or replaced since capture.
+          // A shorter projects array or a different supabaseId means the index shifted.
+          if (live.projects.length <= idx) return;
+          const liveSupabaseId = live.supabaseIds[idx];
+          // If capturedSupabaseId was non-empty and now points to a different UUID,
+          // the slot was reused — do not overwrite the new project with stale data.
+          if (capturedSupabaseId && liveSupabaseId && liveSupabaseId !== capturedSupabaseId) return;
+
           // Skip if a save for this index is already in flight — prevents
           // duplicate inserts when supabaseIds[idx] hasn't been set yet
           if (savingSet.current.has(idx)) return;
           savingSet.current.add(idx);
           try {
-            await saveProject(proj, state.supabaseIds[idx], idx);
+            // Always use live state for the actual save to avoid stale data writes.
+            await saveProject(live.projects[idx], liveSupabaseId, idx);
           } finally {
             savingSet.current.delete(idx);
           }
