@@ -134,9 +134,13 @@ export function Dashboard() {
               <div
                 className={styles.milestoneHeader}
                 onClick={() => { navigate('/tasks', { state: { scrollTo: m.id } }); }}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/tasks', { state: { scrollTo: m.id } }); } }}
+                role="button"
+                tabIndex={0}
                 title="Click to view tasks"
+                aria-label={`View tasks for ${m.title}`}
               >
-                <div className={styles.statusDot} style={{ background: statusColors[m.status] }} />
+                <div className={styles.statusDot} style={{ background: statusColors[m.status] }} role="img" aria-label={`Status: ${statusLabels[m.status]}`} />
                 <div className={styles.msTitle}>{m.title}</div>
                 <div className={styles.msMeta}>
                   <div className={styles.msSlotWs}>
@@ -172,12 +176,20 @@ export function Dashboard() {
                     <span
                       style={{ fontSize: 11, background: 'var(--red-bg)', color: 'var(--red)', borderRadius: 4, padding: '2px 7px', cursor: 'pointer' }}
                       onClick={() => navigate('/raid')}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/raid'); } }}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`${raidLinked.length} linked RAID item${raidLinked.length > 1 ? 's' : ''} — go to RAID log`}
                     >{raidLinked.length} RAID</span>
                   )}
                   {decLinked.length > 0 && (
                     <span
                       style={{ fontSize: 11, background: 'var(--amber-bg)', color: 'var(--amber)', borderRadius: 4, padding: '2px 7px', cursor: 'pointer' }}
                       onClick={() => navigate('/decisions')}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/decisions'); } }}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`${decLinked.length} linked decision${decLinked.length > 1 ? 's' : ''} — go to decision log`}
                     >{decLinked.length} decision{decLinked.length > 1 ? 's' : ''}</span>
                   )}
                 </div>

@@ -181,13 +181,29 @@ export function TaskDetail() {
             <div className={styles.card} style={{ marginTop: 12 }}>
               <h3 className={styles.cardTitle}>Linked Items</h3>
               {raidLinked.map(r => (
-                <div key={r.id} className={styles.linkedItem} onClick={() => navigate('/raid')}>
+                <div
+                  key={r.id}
+                  className={styles.linkedItem}
+                  onClick={() => navigate('/raid')}
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/raid'); } }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${r.type.toUpperCase()}: ${r.title} — go to RAID log`}
+                >
                   <span style={{ fontSize: 10, background: 'var(--red-bg)', color: 'var(--red)', padding: '1px 6px', borderRadius: 3 }}>{r.type.toUpperCase()}</span>
                   <span style={{ fontSize: 13 }}>{r.title}</span>
                 </div>
               ))}
               {decLinked.map(d => (
-                <div key={d.id} className={styles.linkedItem} onClick={() => navigate('/decisions')}>
+                <div
+                  key={d.id}
+                  className={styles.linkedItem}
+                  onClick={() => navigate('/decisions')}
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/decisions'); } }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Decision: ${d.title} — go to decision log`}
+                >
                   <span style={{ fontSize: 10, background: 'var(--amber-bg)', color: 'var(--amber)', padding: '1px 6px', borderRadius: 3 }}>DECISION</span>
                   <span style={{ fontSize: 13 }}>{d.title}</span>
                 </div>

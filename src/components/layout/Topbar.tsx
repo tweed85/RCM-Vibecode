@@ -62,6 +62,7 @@ export function Topbar() {
           <button
             className={styles.btn}
             title="Toggle dark/light mode"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             style={{ fontSize: 16, padding: '4px 10px' }}
             onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
           >
@@ -81,6 +82,9 @@ export function Topbar() {
             <button
               className={styles.hamburger}
               title="Project actions"
+              aria-label="Project actions"
+              aria-haspopup="true"
+              aria-expanded={showProjMenu}
               onClick={() => setShowProjMenu(v => !v)}
             >
               <span /><span /><span />
@@ -88,9 +92,13 @@ export function Topbar() {
             {showProjMenu && (
               <>
                 <div className={styles.projMenuBackdrop} onClick={() => setShowProjMenu(false)} />
-                <div className={styles.projMenu}>
-                  <button className={styles.projMenuItem} onClick={() => { setShowProjMenu(false); setProjectModalMode('edit'); }}>Edit project</button>
-                  <button className={styles.projMenuItem} onClick={() => { setShowProjMenu(false); setProjectModalMode('new'); }}>New project</button>
+                <div
+                  className={styles.projMenu}
+                  role="menu"
+                  onKeyDown={e => { if (e.key === 'Escape') setShowProjMenu(false); }}
+                >
+                  <button role="menuitem" className={styles.projMenuItem} onClick={() => { setShowProjMenu(false); setProjectModalMode('edit'); }}>Edit project</button>
+                  <button role="menuitem" className={styles.projMenuItem} onClick={() => { setShowProjMenu(false); setProjectModalMode('new'); }}>New project</button>
                 </div>
               </>
             )}

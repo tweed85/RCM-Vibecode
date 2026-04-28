@@ -51,7 +51,15 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
   return (
     <div className={styles.group}>
       <div className={styles.header} style={{ borderLeft: `3px solid ${col.text}` }}>
-        <div className={styles.headerLeft} onClick={() => setOpen(o => !o)}>
+        <div
+          className={styles.headerLeft}
+          onClick={() => setOpen(o => !o)}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(o => !o); } }}
+          role="button"
+          tabIndex={0}
+          aria-expanded={open}
+          aria-label={`${m.title}, ${open ? 'collapse' : 'expand'}`}
+        >
           <span className={styles.chevron} style={{ transform: open ? 'rotate(90deg)' : 'rotate(0deg)' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"/>
@@ -62,6 +70,8 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
             className={styles.statusDot}
             style={{ background: statusColors[m.status] }}
             title={statusLabels[m.status]}
+            aria-label={`Status: ${statusLabels[m.status]}`}
+            role="img"
           />
           <span className={styles.msTitle}>{m.title}</span>
           <WorkstreamBadge label={ws.label} color={ws.color} />
@@ -92,6 +102,8 @@ export function MilestoneGroup({ milestone: m, mIdx, forceOpen }: Props) {
             className={styles.collapseBtn}
             onClick={e => { e.stopPropagation(); setOpen(o => !o); }}
             title={open ? 'Collapse' : 'Expand'}
+            aria-label={open ? 'Collapse milestone' : 'Expand milestone'}
+            aria-expanded={open}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
               <polyline points="6 9 12 15 18 9"/>

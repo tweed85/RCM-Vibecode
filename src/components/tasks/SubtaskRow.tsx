@@ -66,12 +66,17 @@ export function SubtaskRow({ subtask: st, sIdx, mIdx, tIdx, milestoneId, taskId,
             onChange={e => setVal(e.target.value)}
             onBlur={save}
             onKeyDown={e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') { setEditing(false); setVal(st.text); } }}
+            aria-label="Edit subtask text"
           />
         ) : (
           <span
             className={`${styles.text} ${st.done ? styles.strikethrough : ''}`}
             onDoubleClick={() => setEditing(true)}
-            title="Double-click to edit"
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === 'F2') { e.preventDefault(); setEditing(true); } }}
+            role="button"
+            tabIndex={0}
+            title="Press Enter or F2 to edit"
+            aria-label={`Subtask: ${st.text}. Press Enter to edit.`}
           >
             {st.text}
           </span>
@@ -91,7 +96,11 @@ export function SubtaskRow({ subtask: st, sIdx, mIdx, tIdx, milestoneId, taskId,
             <span
               className={`${styles.dateDisplay} ${inherited ? styles.dateInherited : ''}`}
               onClick={() => setEditingDates(true)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setEditingDates(true); } }}
+              role="button"
+              tabIndex={0}
               title={inherited ? 'Using parent task dates — click to set own dates' : 'Click to edit dates'}
+              aria-label={display ? `Dates: ${display}. Press Enter to edit.` : 'Set dates. Press Enter to edit.'}
             >
               {display || <span className={styles.dateEmpty}>set dates</span>}
             </span>
@@ -103,7 +112,7 @@ export function SubtaskRow({ subtask: st, sIdx, mIdx, tIdx, milestoneId, taskId,
         </div>
 
         <div className={styles.slotActions}>
-          <button className={styles.del} onClick={() => deleteSubtask(milestoneId, taskId, st.id)} title="Delete subtask">×</button>
+          <button className={styles.del} onClick={() => deleteSubtask(milestoneId, taskId, st.id)} title="Delete subtask" aria-label="Delete subtask">×</button>
         </div>
       </div>
     </div>

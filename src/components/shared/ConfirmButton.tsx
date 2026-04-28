@@ -6,23 +6,28 @@ interface Props {
   className?: string;
   style?: React.CSSProperties;
   confirmLabel?: string;
+  'aria-label'?: string;
 }
 
-export function ConfirmButton({ onConfirm, children, className, style, confirmLabel = 'Delete?' }: Props) {
+export function ConfirmButton({ onConfirm, children, className, style, confirmLabel = 'Delete?', 'aria-label': ariaLabel }: Props) {
   const [confirming, setConfirming] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const confirmBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (confirming) {
       timer.current = setTimeout(() => setConfirming(false), 3000);
+      // Move focus to the confirm button so keyboard users hear the prompt
+      confirmBtnRef.current?.focus();
     }
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [confirming]);
 
   if (confirming) {
     return (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+      <span role="alert" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
         <button
+          ref={confirmBtnRef}
           style={{
             fontSize: 11, padding: '2px 8px', borderRadius: 4, cursor: 'pointer',
             background: 'var(--red)', color: 'white', border: 'none', fontWeight: 600,
@@ -41,7 +46,7 @@ export function ConfirmButton({ onConfirm, children, className, style, confirmLa
   }
 
   return (
-    <button className={className} style={style} onClick={() => setConfirming(true)}>
+    <button className={className} style={style} aria-label={ariaLabel} onClick={() => setConfirming(true)}>
       {children}
     </button>
   );
