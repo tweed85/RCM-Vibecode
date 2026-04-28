@@ -34,6 +34,7 @@ export function AddMilestone() {
   const [form, setForm] = useState<Omit<Milestone, 'id'>>({ ...BLANK_MILESTONE });
   const [editingId, setEditingId] = useState<string | null>(editId);
   const [impactRows, setImpactRows] = useState<ImpactItem[]>([{ type: '', projected: '', realized: '' }]);
+  const [titleError, setTitleError] = useState('');
 
   useEffect(() => {
     if (editId != null) {
@@ -54,6 +55,7 @@ export function AddMilestone() {
     setEditingId(null);
     setForm({ ...BLANK_MILESTONE });
     setImpactRows([{ type: '', projected: '', realized: '' }]);
+    setTitleError('');
     navigate('/milestones', { replace: true, state: {} });
   }
 
@@ -63,7 +65,11 @@ export function AddMilestone() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.title.trim()) return;
+    if (!form.title.trim()) {
+      setTitleError('Milestone title is required.');
+      return;
+    }
+    setTitleError('');
     const impact = impactRows.filter(i => i.type && i.projected.trim());
     if (editingId != null) {
       updateMilestone(editingId, { ...form, impact });
@@ -99,8 +105,23 @@ export function AddMilestone() {
           <h2 className={styles.cardTitle}>{editingId != null ? 'Edit Milestone' : 'New Milestone'}</h2>
           <form onSubmit={handleSubmit}>
             <div className={styles.fieldGroup}>
-              <label className={styles.label}>Milestone Title *</label>
-              <input style={fieldStyle} value={form.title} onChange={e => set('title', e.target.value)} required placeholder="e.g. Prior authorization workflow consolidation" />
+              <label className={styles.label} htmlFor="milestone-title">Milestone Title *</label>
+              <input
+                id="milestone-title"
+                style={titleError ? { ...fieldStyle, borderColor: '#e53e3e' } : fieldStyle}
+                value={form.title}
+                onChange={e => { set('title', e.target.value); if (titleError) setTitleError(''); }}
+                required
+                placeholder="e.g. Prior authorization workflow consolidation"
+                aria-required="true"
+                aria-invalid={!!titleError}
+                aria-describedby={titleError ? 'milestone-title-error' : undefined}
+              />
+              {titleError && (
+                <span id="milestone-title-error" role="alert" style={{ fontSize: 12, color: '#e53e3e', marginTop: 4, display: 'block' }}>
+                  {titleError}
+                </span>
+              )}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>

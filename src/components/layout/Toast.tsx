@@ -20,8 +20,13 @@ export function Toast() {
   }, []);
 
   return (
-    <div className={`${styles.toast} ${visible ? styles.visible : ''}`}>
-      {msg}
+    <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      className={`${styles.toast} ${visible ? styles.visible : ''}`}
+    >
+      {visible ? msg : ''}
     </div>
   );
 }

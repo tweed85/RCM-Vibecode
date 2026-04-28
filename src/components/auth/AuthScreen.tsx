@@ -81,8 +81,8 @@ export function AuthScreen() {
             </div>
           )}
 
-          {error   && <p className={styles.error}>{error}</p>}
-          {message && <p className={styles.success}>{message}</p>}
+          {error   && <p role="alert" className={styles.error}>{error}</p>}
+          {message && <p role="status" aria-live="polite" className={styles.success}>{message}</p>}
 
           <button type="submit" className={styles.submit} disabled={loading}>
             {loading ? 'Please wait…' : mode === 'signin' ? 'Sign In' : mode === 'signup' ? 'Create Account' : 'Send Reset Link'}

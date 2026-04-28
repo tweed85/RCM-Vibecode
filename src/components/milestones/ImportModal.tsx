@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProjectStore } from '../../store/useProjectStore';
 import { parseSmartsheetXlsx, buildImportedProject } from '../../utils/importXlsx';
@@ -48,6 +48,15 @@ export function ImportModal({ onClose }: Props) {
   const [projectName, setProjectName] = useState('');
   const [appendTarget, setAppendTarget] = useState<number>(activeProject);
   const [parseState, setParseState] = useState<ParseState>({ stage: 'idle' });
+  const headingId = useRef(`import-modal-title-${Math.random().toString(36).slice(2, 7)}`);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleFile = useCallback(async (file: File) => {
     if (!file.name.endsWith('.xlsx')) {
@@ -107,12 +116,18 @@ export function ImportModal({ onClose }: Props) {
 
   return (
     <div style={overlay} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div style={modal}>
+      <div
+        style={modal}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId.current}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)' }}>Import from SmartSheets XLSX</h2>
+          <h2 id={headingId.current} style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)' }}>Import from SmartSheets XLSX</h2>
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close dialog"
             style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, color: 'var(--text3)', padding: '0 4px' }}
           >×</button>
         </div>
@@ -130,9 +145,13 @@ export function ImportModal({ onClose }: Props) {
         {/* Drop zone */}
         <div
           onClick={() => fileInputRef.current?.click()}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click(); } }}
           onDragOver={e => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
+          role="button"
+          tabIndex={0}
+          aria-label="Drop an XLSX file here or press Enter to browse"
           style={{
             border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--border)'}`,
             borderRadius: 8, padding: '32px 16px', textAlign: 'center',
@@ -163,7 +182,7 @@ export function ImportModal({ onClose }: Props) {
         )}
 
         {parseState.stage === 'error' && (
-          <div style={{ fontSize: 13, color: '#e53e3e', marginBottom: 16, padding: '8px 12px', background: '#fff5f5', borderRadius: 6 }}>
+          <div role="alert" style={{ fontSize: 13, color: '#e53e3e', marginBottom: 16, padding: '8px 12px', background: '#fff5f5', borderRadius: 6 }}>
             {parseState.message}
           </div>
         )}

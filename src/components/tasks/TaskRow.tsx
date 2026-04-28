@@ -145,12 +145,14 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
             className={styles.reorder}
             onClick={() => moveTask(milestoneId, t.id, -1)}
             title="Move up"
+            aria-label="Move task up"
             disabled={tIdx === 0}
           >▲</button>
           <button
             className={styles.reorder}
             onClick={() => moveTask(milestoneId, t.id, 1)}
             title="Move down"
+            aria-label="Move task down"
             disabled={tIdx === allTasks.length - 1}
           >▼</button>
 
@@ -170,7 +172,11 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
           <span
             className={`${styles.text} ${effectiveDone ? styles.strikethrough : ''}`}
             onClick={() => navigate(`/tasks/${t.id}`)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/tasks/${t.id}`); } }}
+            role="button"
+            tabIndex={0}
             title="View task detail"
+            aria-label={`View detail for: ${t.text}`}
           >
             {t.text}
           </span>
@@ -197,14 +203,22 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
               <span
                 className={styles.raidBadge}
                 onClick={() => navigate('/raid')}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/raid'); } }}
+                role="button"
+                tabIndex={0}
                 title={raidLinked.map(r => r.title).join(', ')}
+                aria-label={`${raidLinked.length} RAID item${raidLinked.length > 1 ? 's' : ''}: ${raidLinked.map(r => r.title).join(', ')}`}
               ><IconRaid />{raidLinked.length}</span>
             )}
             {decLinked.length > 0 && (
               <span
                 className={styles.decBadge}
                 onClick={() => navigate('/decisions')}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/decisions'); } }}
+                role="button"
+                tabIndex={0}
                 title={decLinked.map(d => d.title).join(', ')}
+                aria-label={`${decLinked.length} decision${decLinked.length > 1 ? 's' : ''}: ${decLinked.map(d => d.title).join(', ')}`}
               ><IconDec />{decLinked.length}</span>
             )}
             {t.predecessors?.length > 0 && (
@@ -219,27 +233,34 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
             <button
               className={styles.iconBtn}
               title="Edit task"
+              aria-label="Edit task"
               onClick={() => navigate(`/tasks/${t.id}`)}
             ><IconEdit /></button>
 
             <button
               className={`${styles.iconBtn} ${t.note?.trim() ? styles.iconBtnActive : ''}`}
               title={t.note?.trim() ? 'View / edit note' : 'Add note'}
+              aria-label={t.note?.trim() ? 'View or edit note' : 'Add note'}
+              aria-expanded={showNote}
               onClick={() => { setShowNote(v => !v); if (!showNote) setEditNote(false); }}
             ><IconNote /></button>
 
             <button
               className={`${styles.iconBtn} ${t.subtasks?.length ? styles.iconBtnActive : ''}`}
               title={t.subtasks?.length ? `${t.subtasks.length} subtask${t.subtasks.length > 1 ? 's' : ''}` : 'Add subtasks'}
+              aria-label={t.subtasks?.length ? `${t.subtasks.length} subtask${t.subtasks.length > 1 ? 's' : ''}, expand or collapse` : 'Add subtasks'}
+              aria-expanded={expanded}
               onClick={() => setExpanded(v => !v)}
             >
               <IconSub />
-              {t.subtasks?.length ? <span style={{ fontSize: 10, marginLeft: 2 }}>{t.subtasks.length}</span> : null}
+              {t.subtasks?.length ? <span style={{ fontSize: 10, marginLeft: 2 }} aria-hidden="true">{t.subtasks.length}</span> : null}
             </button>
 
             <button
               className={`${styles.iconBtn} ${showPredPanel ? styles.iconBtnActive : ''}`}
               title={t.predecessors?.length ? `${t.predecessors.length} predecessor${t.predecessors.length > 1 ? 's' : ''}` : 'Add predecessors'}
+              aria-label={t.predecessors?.length ? `${t.predecessors.length} predecessor${t.predecessors.length > 1 ? 's' : ''}, open panel` : 'Add predecessors'}
+              aria-expanded={showPredPanel}
               onClick={() => setShowPredPanel(v => !v)}
             ><IconPred /></button>
 
@@ -247,6 +268,7 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
               className={styles.iconBtnDanger}
               onConfirm={() => deleteTask(milestoneId, t.id)}
               confirmLabel="Delete?"
+              aria-label="Delete task"
             >×</ConfirmButton>
           </div>
         </div>
@@ -267,7 +289,15 @@ export function TaskRow({ task: t, tIdx, mIdx, milestoneId, allTasks }: Props) {
               <button className={styles.btnSmGhost} onClick={() => { setEditNote(false); setNoteVal(t.note ?? ''); }}>Cancel</button>
             </div>
           ) : (
-            <div className={styles.noteText} onClick={() => setEditNote(true)} title="Click to edit">
+            <div
+              className={styles.noteText}
+              onClick={() => setEditNote(true)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setEditNote(true); } }}
+              role="button"
+              tabIndex={0}
+              title="Click to edit"
+              aria-label={t.note?.trim() ? 'Edit note' : 'Add note'}
+            >
               {t.note?.trim() ? t.note : <em style={{ color: 'var(--text3)' }}>No note yet — click to add</em>}
             </div>
           )}

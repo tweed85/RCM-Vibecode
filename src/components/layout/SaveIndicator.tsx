@@ -17,14 +17,18 @@ export function SaveIndicator() {
   }, []);
 
   return (
-    <span style={{
-      fontSize: 12,
-      color: 'rgba(255,255,255,0.65)',
-      opacity: visible ? 1 : 0,
-      transition: 'opacity 0.4s',
-      pointerEvents: 'none',
-    }}>
-      Saved
+    <span
+      aria-live="polite"
+      aria-atomic="true"
+      style={{
+        fontSize: 12,
+        color: 'rgba(255,255,255,0.65)',
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.4s',
+        pointerEvents: 'none',
+      }}
+    >
+      {visible ? 'Saved' : ''}
     </span>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProjectStore } from '../../store/useProjectStore';
 import { EHR_OPTIONS, ENGAGEMENT_TYPES } from '../../constants/enums';
@@ -77,7 +77,18 @@ export function ProjectModal({ mode, onClose }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [importState, setImportState] = useState<ImportState>({ stage: 'idle' });
   const [dragging, setDragging] = useState(false);
+  const [clientNameError, setClientNameError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const headingId = useRef(`modal-title-${Math.random().toString(36).slice(2, 7)}`);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   function setField<K extends keyof ProjectConfig>(key: K, val: ProjectConfig[K]) {
     setForm(f => ({ ...f, [key]: val }));
@@ -123,7 +134,11 @@ export function ProjectModal({ mode, onClose }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.clientName.trim()) return;
+    if (!form.clientName.trim()) {
+      setClientNameError('Client / Project Name is required.');
+      return;
+    }
+    setClientNameError('');
 
     const importedMilestones = importState.stage === 'done' ? importState.milestones : [];
 
@@ -160,14 +175,21 @@ export function ProjectModal({ mode, onClose }: Props) {
 
   return (
     <div style={overlay} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div style={modal}>
+      <div
+        ref={dialogRef}
+        style={modal}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId.current}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)' }}>
+          <h2 id={headingId.current} style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)' }}>
             {mode === 'new' ? 'New Project' : 'Edit Project'}
           </h2>
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close dialog"
             style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, color: 'var(--text3)', padding: '0 4px' }}
           >×</button>
         </div>
@@ -186,13 +208,21 @@ export function ProjectModal({ mode, onClose }: Props) {
 
           <Field label="Client / Project Name *">
             <input
-              style={fieldStyle}
+              style={clientNameError ? { ...fieldStyle, borderColor: '#e53e3e' } : fieldStyle}
               value={form.clientName}
-              onChange={e => setField('clientName', e.target.value)}
+              onChange={e => { setField('clientName', e.target.value); if (clientNameError) setClientNameError(''); }}
               placeholder="e.g. Memorial Health System"
               required
               autoFocus
+              aria-required="true"
+              aria-invalid={!!clientNameError}
+              aria-describedby={clientNameError ? 'client-name-error' : undefined}
             />
+            {clientNameError && (
+              <span id="client-name-error" role="alert" style={{ fontSize: 12, color: '#e53e3e', marginTop: 4, display: 'block' }}>
+                {clientNameError}
+              </span>
+            )}
           </Field>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -264,7 +294,7 @@ export function ProjectModal({ mode, onClose }: Props) {
                 {importState.stage === 'parsing'
                   ? 'Parsing…'
                   : importState.stage === 'error'
-                    ? <span style={{ color: '#e53e3e' }}>{importState.message}</span>
+                    ? <span role="alert" style={{ color: '#e53e3e' }}>{importState.message}</span>
                     : 'Drop a SmartSheets .xlsx here, or click to browse'}
               </div>
             ) : (
