@@ -188,3 +188,8 @@
 }
 
 .dateClose:hover { color: var(--red); }
+
+@media (max-width: 700px) {
+  .slotDate { display: none; }
+  .slotOwner { width: auto; min-width: 0; }
+}
